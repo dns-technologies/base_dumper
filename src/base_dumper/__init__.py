@@ -18,12 +18,14 @@ from .common import (
     timeouts,
     transfer_diagram,
 )
+from .dumper import BaseDumper
 from .version import __version__
 
 __all__ = (
     "__version__",
     "AbstractCursor",
     "AbstractReader",
+    "BaseDumper",
     "BaseDumperError",
     "BaseDumperTypeError",
     "BaseDumperValueError",
