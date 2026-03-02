@@ -37,6 +37,55 @@ from .common import (
 from .version import __version__
 
 
+def multiquery(dump_method: MethodType):
+    """Multiquery decorator."""
+
+    def wrapper(*args, **kwargs):
+
+        first_part: list[str]
+        second_part: list[str]
+
+        self: BaseDumper = args[0]
+        cursor: AbstractCursor = (kwargs.get("dumper_src") or self).cursor
+        query: str = kwargs.get("query_src") or kwargs.get("query")
+        part: int = 1
+        first_part, second_part = chunk_query(query)
+        all_parts = len(sum((first_part, second_part), [])) + int(
+            bool(kwargs.get("table_name") or kwargs.get("table_src"))
+        )
+
+        if len(first_part) > 1:
+            for query in first_part:
+                self.logger.info(f"Execute query {part}/{all_parts}")
+                cursor.execute(query)
+                part += 1
+
+        if second_part:
+            for key in ("query", "query_src"):
+                if key in kwargs:
+                    kwargs[key] = second_part.pop(0)
+                    break
+
+        self.logger.info(
+            f"Execute stream {part}/{all_parts} [{self.stream_type} mode]"
+        )
+        output = dump_method(*args, **kwargs)
+
+        if second_part:
+            for query in second_part:
+                part += 1
+                self.logger.info(f"Execute query {part}/{all_parts}")
+                cursor.execute(query)
+
+        if output:
+            self.refresh()
+
+        collect()
+        return output
+
+    return wrapper
+
+
 class BaseDumper(ABC):
     """Abstract dumper class."""
 
@@ -64,7 +113,7 @@ class BaseDumper(ABC):
         """Class initialization."""
 
         if not logger:
-            logger_name = self.__class__
+            logger_name = self.__class__.__name__
             version=__version__
             logger = DumperLogger(logger_name=logger_name, version=version)
 
@@ -87,75 +136,17 @@ class BaseDumper(ABC):
         # ... # <- child dumper __init__ code here
 
     @property
-    @abstractmethod
     def timeout(self) -> int:
-        """Abstract property method for get current server timeout."""
+        """Property method for get statement_timeout."""
 
-    @timeout.setter
-    @abstractmethod
-    def timeout(self, timeout_value: int) -> int:
-        """Abstract property method for set current server timeout."""
+        return self._timeout
 
     @property
-    @abstractmethod
     def isolation(self) -> IsolationLevel:
-        """Abstract property method for get
-        current server transaction isolation level."""
+        """Property method for get current
+        server transaction isolation level."""
 
-    @isolation.setter
-    @abstractmethod
-    def isolation(self, isolation_value: IsolationLevel) -> IsolationLevel:
-        """Abstract property method for set
-        current server transaction isolation level."""
-
-    @staticmethod
-    def multiquery(dump_method: MethodType):
-        """Multiquery decorator."""
-
-        def wrapper(*args, **kwargs):
-
-            first_part: list[str]
-            second_part: list[str]
-
-            self: BaseDumper = args[0]
-            cursor: AbstractCursor = (kwargs.get("dumper_src") or self).cursor
-            query: str = kwargs.get("query_src") or kwargs.get("query")
-            part: int = 1
-            first_part, second_part = chunk_query(query)
-            all_parts = len(sum((first_part, second_part), [])) + int(
-                bool(kwargs.get("table_name") or kwargs.get("table_src"))
-            )
-
-            if len(first_part) > 1:
-                for query in first_part:
-                    self.logger.info(f"Execute query {part}/{all_parts}")
-                    cursor.execute(query)
-                    part += 1
-
-            if second_part:
-                for key in ("query", "query_src"):
-                    if key in kwargs:
-                        kwargs[key] = second_part.pop(0)
-                        break
-
-            self.logger.info(
-                f"Execute stream {part}/{all_parts} [{self.stream_type} mode]"
-            )
-            output = dump_method(*args, **kwargs)
-
-            if second_part:
-                for query in second_part:
-                    part += 1
-                    self.logger.info(f"Execute query {part}/{all_parts}")
-                    cursor.execute(query)
-
-            if output:
-                self.refresh()
-
-            collect()
-            return output
-
-        return wrapper
+        return self._isolation
 
     @multiquery
     @abstractmethod
@@ -166,7 +157,6 @@ class BaseDumper(ABC):
         table_name: str | None,
     ) -> bool:
         """Internal method read_dump for generate kwargs to decorator."""
-
 
     @multiquery
     @abstractmethod

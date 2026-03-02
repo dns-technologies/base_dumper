@@ -18,7 +18,10 @@ from .common import (
     timeouts,
     transfer_diagram,
 )
-from .dumper import BaseDumper
+from .dumper import (
+    BaseDumper,
+    multiquery,
+)
 from .version import __version__
 
 __all__ = (
@@ -36,6 +39,7 @@ __all__ = (
     "DumperMode",
     "IsolationLevel",
     "chunk_query",
+    "multiquery",
     "random_name",
     "timeouts",
     "transfer_diagram",

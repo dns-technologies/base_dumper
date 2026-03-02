@@ -37,7 +37,7 @@ class DumperLogger(Logger):
         """Class initialize."""
 
         if not logger_name:
-            logger_name = self.__class__
+            logger_name = self.__class__.__name__
 
         super().__init__(logger_name)
 
