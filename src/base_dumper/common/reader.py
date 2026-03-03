@@ -12,8 +12,8 @@ from pandas import DataFrame as PdFrame
 from polars import DataFrame as PlFrame
 
 
-class AbstractReader(ABC):
-    """Absctract stream reader object.
+class ExampleReader(ABC):
+    """Example stream reader object.
     This class must have this five methods besides his own."""
 
     fileobj: BufferedReader

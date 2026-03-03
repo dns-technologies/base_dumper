@@ -13,7 +13,7 @@ from sys import stdout
 from ..version import __version__
 
 
-def __root_dir() -> str:
+def root_dir() -> str:
     """Get project directory."""
 
     try:
@@ -46,7 +46,7 @@ class DumperLogger(Logger):
             "| %(funcName)s-%(filename)s-%(lineno)04d <%(message)s>"
         )
         self.setLevel(level)
-        self.log_path = f"{__root_dir()}/dumper_logs"
+        self.log_path = f"{root_dir()}/dumper_logs"
         makedirs(self.log_path, exist_ok=True)
 
         formatter = Formatter(

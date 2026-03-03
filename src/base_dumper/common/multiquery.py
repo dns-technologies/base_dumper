@@ -6,7 +6,7 @@ from sqlparse import format as sql_format
 PATTERN = r";(?=(?:[^']*'[^']*')*[^']*$)"
 
 
-def __query_formatter(query: str) -> str:
+def query_formatter(query: str) -> str:
     """Reformat query."""
 
     return sql_format(sql=query, strip_comments=True).strip().strip(";")
@@ -19,9 +19,9 @@ def chunk_query(query: str | None) -> tuple[list[str]]:
         return [], []
 
     parts = [
-        part.strip(";").strip()
-        for part in split(PATTERN, __query_formatter(query))
-        if part.strip(";").strip()
+        part.strip().strip(";").strip()
+        for part in split(PATTERN, query_formatter(query))
+        if part.strip().strip(";").strip()
     ]
 
     if not parts:
@@ -33,11 +33,14 @@ def chunk_query(query: str | None) -> tuple[list[str]]:
     for i, part in enumerate(parts):
         first_part.append(part)
 
-        if (i + 1 < len(parts) and parts[i + 1].lower().startswith(
-                ("with", "select")
-            )
+        if (
+            i + 1 < len(parts) and parts[i + 1].lower().startswith(
+            ("with", "select", "show"))
         ):
             second_part = parts[i + 1:]
             break
+
+    if len(first_part) == 1 and not second_part:
+        return second_part, first_part
 
     return first_part, second_part

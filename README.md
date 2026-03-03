@@ -12,7 +12,7 @@ It includes abstract classes, common data structures, and utility functions.
 
 ## Features
 
-- **Abstract Base Classes**: `BaseDumper`, `AbstractCursor`, `AbstractReader`
+- **Abstract Base Classes**: `BaseDumper`, `AbstractCursor`, `ExampleReader`
 - **Multi-query Support**: Automatic splitting and execution of multiple SQL statements
 - **Data Format Support**: Convert between database tables and Python, pandas, or polars
 - **Streaming**: Memory-efficient data transfer between sources
@@ -33,11 +33,38 @@ pip install base-dumper
 Abstract dumper class that all database-specific dumpers should inherit from.
 
 ```python
-from base_dumper import BaseDumper, DBConnector, CompressionMethod, IsolationLevel
+from logging import Logger
+from base_dumper import (
+    BaseDumper,
+    CompressionMethod,
+    DBConnector,
+    DumperMode,
+    IsolationLevel,
+)
 
-class PostgreSQLDumper(BaseDumper):
+class MyNewDumper(BaseDumper):
+    def __init__(
+        self,
+        connector: DBConnector,
+        compression_method: CompressionMethod,
+        logger: Logger,
+        timeout: int,
+        isolation: IsolationLevel,
+        mode: DumperMode,
+    ):
+        super().__init__(
+            connector,
+            compression_method,
+            logger,
+            timeout,
+            isolation,
+            mode,
+        )
+        # Implement MyNewDumper init
+        ...
+
     # Implement abstract methods
-    pass
+    ...
 ```
 
 ### Data Transfer Methods
@@ -70,7 +97,7 @@ connector = DBConnector(
 )
 
 # Initialize dumper (with concrete implementation)
-dumper = PostgreSQLDumper(
+dumper = MyNewDumper(
     connector=connector,
     compression_method=CompressionMethod.ZSTD,
     isolation=IsolationLevel.committed

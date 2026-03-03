@@ -4,7 +4,7 @@ from light_compressor import CompressionMethod
 
 from .common import (
     AbstractCursor,
-    AbstractReader,
+    ExampleReader,
     BaseDumperError,
     BaseDumperTypeError,
     BaseDumperValueError,
@@ -27,7 +27,6 @@ from .version import __version__
 __all__ = (
     "__version__",
     "AbstractCursor",
-    "AbstractReader",
     "BaseDumper",
     "BaseDumperError",
     "BaseDumperTypeError",
@@ -37,6 +36,7 @@ __all__ = (
     "DBMetadata",
     "DumperLogger",
     "DumperMode",
+    "ExampleReader",
     "IsolationLevel",
     "chunk_query",
     "multiquery",

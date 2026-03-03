@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name="pgpack_dumper",
-    version="0.0.0.4",
+    version="0.0.0.5",
     package_dir={"": "src"},
     packages=[
         "base_dumper",

@@ -17,12 +17,11 @@ from .isolations import IsolationLevel
 from .logger import DumperLogger
 from .mode_level import DumperMode
 from .multiquery import chunk_query
-from .reader import AbstractReader
+from .reader import ExampleReader
 
 
 __all__ = (
     "AbstractCursor",
-    "AbstractReader",
     "BaseDumperError",
     "BaseDumperTypeError",
     "BaseDumperValueError",
@@ -30,6 +29,7 @@ __all__ = (
     "DBMetadata",
     "DumperLogger",
     "DumperMode",
+    "ExampleReader",
     "IsolationLevel",
     "chunk_query",
     "random_name",

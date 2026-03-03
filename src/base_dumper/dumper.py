@@ -25,7 +25,7 @@ from polars import (
 
 from .common import (
     AbstractCursor,
-    AbstractReader,
+    ExampleReader,
     DBConnector,
     DBMetadata,
     DumperLogger,
@@ -50,37 +50,36 @@ def multiquery(dump_method: MethodType):
         query: str = kwargs.get("query_src") or kwargs.get("query")
         part: int = 1
         first_part, second_part = chunk_query(query)
-        all_parts = len(sum((first_part, second_part), [])) + int(
+        all_parts = len(sum((first_part, second_part), [])) or int(
             bool(kwargs.get("table_name") or kwargs.get("table_src"))
         )
 
-        if len(first_part) > 1:
-            for query in first_part:
-                self.logger.info(f"Execute query {part}/{all_parts}")
-                cursor.execute(query)
-                part += 1
+        for query in first_part:
+            self.logger.info(f"Execute query {part}/{all_parts}")
+            cursor.execute(query)
+            part += 1
 
-        if second_part:
-            for key in ("query", "query_src"):
-                if key in kwargs:
-                    kwargs[key] = second_part.pop(0)
-                    break
+        for key in ("query", "query_src"):
+            if key in kwargs and second_part:
+                kwargs[key] = second_part.pop(0)
+                break
 
         self.logger.info(
             f"Execute stream {part}/{all_parts} [{self.stream_type} mode]"
         )
         output = dump_method(*args, **kwargs)
 
-        if second_part:
-            for query in second_part:
-                part += 1
-                self.logger.info(f"Execute query {part}/{all_parts}")
-                cursor.execute(query)
-
         if output:
             self.refresh()
 
+        cursor: AbstractCursor = (kwargs.get("dumper_src") or self).cursor
         collect()
+
+        for query in second_part:
+            part += 1
+            self.logger.info(f"Execute query {part}/{all_parts}")
+            cursor.execute(query)
+
         return output
 
     return wrapper
@@ -100,6 +99,7 @@ class BaseDumper(ABC):
     dbname: str
     is_readonly: bool
     stream_type: str
+    version: str = __version__
 
     def __init__(
         self,
@@ -114,7 +114,7 @@ class BaseDumper(ABC):
 
         if not logger:
             logger_name = self.__class__.__name__
-            version=__version__
+            version=self.version
             logger = DumperLogger(logger_name=logger_name, version=version)
 
         self.connector = connector
@@ -150,7 +150,7 @@ class BaseDumper(ABC):
 
     @multiquery
     @abstractmethod
-    def __read_dump(
+    def _read_dump(
         self,
         fileobj: BufferedWriter,
         query: str | None,
@@ -160,7 +160,7 @@ class BaseDumper(ABC):
 
     @multiquery
     @abstractmethod
-    def __write_between(
+    def _write_between(
         self,
         table_dest: str,
         table_src: str | None,
@@ -171,11 +171,11 @@ class BaseDumper(ABC):
 
     @multiquery
     @abstractmethod
-    def __to_reader(
+    def _to_reader(
         self,
         query: str | None,
         table_name: str | None,
-    ) -> AbstractReader:
+    ) -> ExampleReader:
         """Internal method to_reader for generate kwargs to decorator."""
 
     def read_dump(
@@ -186,7 +186,7 @@ class BaseDumper(ABC):
     ) -> bool:
         """Read dump from Server."""
 
-        return self.__read_dump(
+        return self._read_dump(
             fileobj=fileobj,
             query=query,
             table_name=table_name,
@@ -209,7 +209,7 @@ class BaseDumper(ABC):
     ) -> bool:
         """Write stream between Servers."""
 
-        return self.__write_between(
+        return self._write_between(
             table_dest=table_dest,
             table_src=table_src,
             query_src=query_src,
@@ -220,10 +220,10 @@ class BaseDumper(ABC):
         self,
         query: str | None = None,
         table_name: str | None = None,
-    ) -> AbstractReader:
+    ) -> ExampleReader:
         """Get stream from Server as stream object."""
 
-        return self.__to_reader(
+        return self._to_reader(
             query=query,
             table_name=table_name,
         )

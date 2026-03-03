@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "base_dumper"
-version = "0.0.0.4"
+version = "0.0.0.5"
 description = "Abstract class and base common modules for dbhose-airflow dumpers."
 readme = "README.md"
 requires-python = ">=3.10"
