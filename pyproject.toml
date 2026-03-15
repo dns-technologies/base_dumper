@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "base_dumper"
-version = "0.0.0.5"
+version = "0.1.0.dev0"
 description = "Abstract class and base common modules for dbhose-airflow dumpers."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -22,17 +22,17 @@ classifiers = [
     "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
-    "light-compressor==0.0.2.2",
+    "light-compressor==0.1.0.dev2",
     "sqlparse==0.5.4",
-    "pandas",
-    "polars",
+    "pandas>=2.1.0",
+    "polars>=0.20.31",
 ]
 
 [project.urls]
-Homepage = "https://github.com/0xMihalich/base_dumper"
-Documentation = "https://0xmihalich.github.io/dbhose_airflow/classes/base_dumper/index.html"
-Repository = "https://github.com/0xMihalich/base_dumper"
-Changelog = "https://github.com/0xMihalich/base_dumper/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/dns-technologies/base_dumper"
+Documentation = "https://dns-technologies.github.io/dbhose_airflow/classes/base_dumper/index.html"
+Repository = "https://github.com/dns-technologies/base_dumper"
+Changelog = "https://github.com/dns-technologies/base_dumper/blob/main/CHANGELOG.md"
 
 [tool.setuptools]
 packages = {find = {where = ["src"]}}

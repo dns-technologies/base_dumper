@@ -22,8 +22,16 @@ It includes abstract classes, common data structures, and utility functions.
 
 ## Installation
 
+from developer pip
+
 ```bash
-pip install base-dumper
+pip install base-dumper -U --index-url https://dns-technologies.github.io/dbhose-dev-pip/simple/
+```
+
+or from source
+
+```bash
+pip install . --extra-index-url https://dns-technologies.github.io/dbhose-dev-pip/simple/
 ```
 
 ## Core Components
@@ -47,6 +55,7 @@ class MyNewDumper(BaseDumper):
         self,
         connector: DBConnector,
         compression_method: CompressionMethod,
+        compression_level: int,
         logger: Logger,
         timeout: int,
         isolation: IsolationLevel,
@@ -55,6 +64,7 @@ class MyNewDumper(BaseDumper):
         super().__init__(
             connector,
             compression_method,
+            compression_level,
             logger,
             timeout,
             isolation,
@@ -93,14 +103,14 @@ connector = DBConnector(
     dbname="mydb",
     user="user",
     password="pass",
-    port=5432
+    port=5432,
 )
 
 # Initialize dumper (with concrete implementation)
 dumper = MyNewDumper(
     connector=connector,
     compression_method=CompressionMethod.ZSTD,
-    isolation=IsolationLevel.committed
+    isolation=IsolationLevel.committed,
 )
 
 # Read dump to file

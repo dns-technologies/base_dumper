@@ -1,5 +1,14 @@
 # Version History
 
+## 0.1.0.dev0
+
+* Developer release (not public to pip)
+* Update depends pandas>=2.1.0
+* Update depends polars>=0.20.31
+* Update depends light-compressor==0.1.0.dev2
+* Update README.md
+* Add compression_level attribute
+
 ## 0.0.0.5
 
 * Fix multiquery decorator

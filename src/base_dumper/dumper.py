@@ -16,7 +16,10 @@ from typing import (
     Optional,
 )
 
-from light_compressor import CompressionMethod
+from light_compressor import (
+    CompressionLevel,
+    CompressionMethod,
+)
 from pandas import DataFrame as PdFrame
 from polars import (
     DataFrame as PlFrame,
@@ -90,6 +93,7 @@ class BaseDumper(ABC):
 
     connector: DBConnector
     compression_method: CompressionMethod
+    compression_level: int
     logger: Logger
     timeout: int
     isolation: IsolationLevel
@@ -105,6 +109,7 @@ class BaseDumper(ABC):
         self,
         connector: DBConnector,
         compression_method: CompressionMethod = CompressionMethod.ZSTD,
+        compression_level: int = CompressionLevel.DEFAULT_COMPRESSION,
         logger: Logger | None = None,
         timeout: int = timeouts.DBMS_1_HOUR_TIMEOUT_SEC,
         isolation: IsolationLevel = IsolationLevel.committed,
@@ -119,6 +124,7 @@ class BaseDumper(ABC):
 
         self.connector = connector
         self.compression_method = compression_method
+        self.compression_level = compression_level
         self.logger = logger
         self.mode = mode
         self._timeout = timeout
