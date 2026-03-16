@@ -98,6 +98,7 @@ class BaseDumper(ABC):
     timeout: int
     isolation: IsolationLevel
     mode: DumperMode
+    s3fs: bool
     dbmeta: DBMetadata | None
     cursor: AbstractCursor
     dbname: str
