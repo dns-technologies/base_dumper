@@ -1,6 +1,9 @@
 """Abstract class and base common modules for dbhose-airflow dumpers."""
 
-from light_compressor import CompressionMethod
+from light_compressor import (
+    CompressionLevel,
+    CompressionMethod,
+)
 
 from .common import (
     AbstractCursor,
@@ -31,6 +34,7 @@ __all__ = (
     "BaseDumperError",
     "BaseDumperTypeError",
     "BaseDumperValueError",
+    "CompressionLevel",
     "CompressionMethod",
     "DBConnector",
     "DBMetadata",

@@ -1,5 +1,11 @@
 # Version History
 
+## 0.1.0.dev1
+
+* Developer release (not public to pip)
+* Fix comment in BaseDumper.__init__() section
+* Add CompressionLevel import
+
 ## 0.1.0.dev0
 
 * Developer release (not public to pip)

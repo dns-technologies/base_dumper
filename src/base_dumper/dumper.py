@@ -134,6 +134,7 @@ class BaseDumper(ABC):
         # super().__init__(
         #     connector,
         #     compression_method,
+        #     compression_level,
         #     logger,
         #     timeout,
         #     isolation,
