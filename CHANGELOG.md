@@ -1,5 +1,11 @@
 # Version History
 
+## 0.1.0.dev2
+
+* Developer release (not public to pip)
+* Add s3fs: bool initialization param for upload dumps to s3 with s3fs library. Default is False.
+* Update README.md
+
 ## 0.1.0.dev1
 
 * Developer release (not public to pip)

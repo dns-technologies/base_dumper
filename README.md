@@ -56,10 +56,11 @@ class MyNewDumper(BaseDumper):
         connector: DBConnector,
         compression_method: CompressionMethod,
         compression_level: int,
-        logger: Logger,
+        logger: Logger | None,
         timeout: int,
         isolation: IsolationLevel,
         mode: DumperMode,
+        s3fs: bool,
     ):
         super().__init__(
             connector,
@@ -69,6 +70,7 @@ class MyNewDumper(BaseDumper):
             timeout,
             isolation,
             mode,
+            s3fs,
         )
         # Implement MyNewDumper init
         ...

@@ -114,6 +114,7 @@ class BaseDumper(ABC):
         timeout: int = timeouts.DBMS_1_HOUR_TIMEOUT_SEC,
         isolation: IsolationLevel = IsolationLevel.committed,
         mode: DumperMode = DumperMode.PROD,
+        s3fs: bool = False,
     ) -> None:
         """Class initialization."""
 
@@ -127,6 +128,7 @@ class BaseDumper(ABC):
         self.compression_level = compression_level
         self.logger = logger
         self.mode = mode
+        self.s3fs = s3fs
         self._timeout = timeout
         self._isolation = isolation
 
@@ -139,6 +141,7 @@ class BaseDumper(ABC):
         #     timeout,
         #     isolation,
         #     mode,
+        #     s3fs,
         # )
         # ... # <- child dumper __init__ code here
 
