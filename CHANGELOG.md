@@ -1,5 +1,12 @@
 # Version History
 
+## 0.1.0.dev3
+
+* Developer release (not public to pip)
+* Update depends light-compressor==0.1.0.dev3
+* Change compression_level to CompressionLevel.ZSTD_DEFAULT
+* Add BaseDumper.mode_action() for DumperMode.DEBUG/TEST actions
+
 ## 0.1.0.dev2
 
 * Developer release (not public to pip)

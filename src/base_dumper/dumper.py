@@ -60,6 +60,7 @@ def multiquery(dump_method: MethodType):
         for query in first_part:
             self.logger.info(f"Execute query {part}/{all_parts}")
             cursor.execute(query)
+            self.mode_action()
             part += 1
 
         for key in ("query", "query_src"):
@@ -70,7 +71,7 @@ def multiquery(dump_method: MethodType):
         self.logger.info(
             f"Execute stream {part}/{all_parts} [{self.stream_type} mode]"
         )
-        output = dump_method(*args, **kwargs)
+        output = self.mode_action(dump_method, *args, **kwargs)
 
         if output:
             self.refresh()
@@ -82,6 +83,7 @@ def multiquery(dump_method: MethodType):
             part += 1
             self.logger.info(f"Execute query {part}/{all_parts}")
             cursor.execute(query)
+            self.mode_action()
 
         return output
 
@@ -110,7 +112,7 @@ class BaseDumper(ABC):
         self,
         connector: DBConnector,
         compression_method: CompressionMethod = CompressionMethod.ZSTD,
-        compression_level: int = CompressionLevel.DEFAULT_COMPRESSION,
+        compression_level: int = CompressionLevel.ZSTD_DEFAULT,
         logger: Logger | None = None,
         timeout: int = timeouts.DBMS_1_HOUR_TIMEOUT_SEC,
         isolation: IsolationLevel = IsolationLevel.committed,
@@ -132,6 +134,11 @@ class BaseDumper(ABC):
         self.s3fs = s3fs
         self._timeout = timeout
         self._isolation = isolation
+
+        if mode is not DumperMode.PROD:
+            self.logger.warning(
+                f"{self.__class__.__name__} run in {self.mode.name} mode.",
+            )
 
         # Child dumper must be add initialize params and other settings after:
         # super().__init__(
@@ -158,6 +165,18 @@ class BaseDumper(ABC):
         server transaction isolation level."""
 
         return self._isolation
+
+    def mode_action(
+        self,
+        dump_method: MethodType | None = None,
+        *args: Any,
+        **kwargs: dict[str, Any],
+    ) -> None:
+        """DumperMode.DEBUG or DumperMode.TEST action.
+        Default is do nothing."""
+
+        if dump_method:
+            return dump_method(*args, **kwargs)
 
     @multiquery
     @abstractmethod
