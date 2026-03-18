@@ -1,46 +1,45 @@
-from re import split
+from re import (
+    compile,
+    IGNORECASE,
+)
 
 from sqlparse import format as sql_format
 
 
-PATTERN = r";(?=(?:[^']*'[^']*')*[^']*$)"
+EXECUTE_PATTERN = compile(r'^(with|select|show)\s', IGNORECASE)
+QUERY_PATTERN = compile(r";(?=(?:[^']*'[^']*')*[^']*$)")
+STRIP_CHARS = "; \t\n\r"
 
 
-def query_formatter(query: str) -> str:
+def query_formatter(queries: str) -> str:
     """Reformat query."""
 
-    return sql_format(sql=query, strip_comments=True).strip().strip(";")
+    return sql_format(sql=queries, strip_comments=True).strip(STRIP_CHARS)
 
 
-def chunk_query(query: str | None) -> tuple[list[str]]:
+def chunk_query(queries: str | None) -> tuple[list[str], list[str]]:
     """Chunk multiquery to queryes."""
 
-    if not query:
+    if not queries:
         return [], []
 
-    parts = [
-        part.strip().strip(";").strip()
-        for part in split(PATTERN, query_formatter(query))
-        if part.strip().strip(";").strip()
+    first_part: list[str] = [
+        part.strip(STRIP_CHARS)
+        for part in QUERY_PATTERN.split(query_formatter(queries))
+        if part.strip(STRIP_CHARS)
     ]
 
-    if not parts:
+    if not first_part:
         return [], []
 
-    first_part: list[str] = []
     second_part: list[str] = []
 
-    for i, part in enumerate(parts):
-        first_part.append(part)
+    for _ in range(len(first_part)):
+        query = first_part.pop()
+        second_part.append(query)
 
-        if (
-            i + 1 < len(parts) and parts[i + 1].lower().startswith(
-            ("with", "select", "show"))
-        ):
-            second_part = parts[i + 1:]
+        if EXECUTE_PATTERN.match(query):
             break
 
-    if len(first_part) == 1 and not second_part:
-        return second_part, first_part
-
+    second_part.reverse()
     return first_part, second_part

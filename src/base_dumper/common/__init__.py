@@ -13,6 +13,7 @@ from .errors import (
     BaseDumperValueError,
 )
 from .generate_name import random_name
+from .info import debug_info
 from .isolations import IsolationLevel
 from .logger import DumperLogger
 from .mode_level import DumperMode
@@ -32,6 +33,7 @@ __all__ = (
     "ExampleReader",
     "IsolationLevel",
     "chunk_query",
+    "debug_info",
     "random_name",
     "timeouts",
     "transfer_diagram",

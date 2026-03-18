@@ -1,5 +1,13 @@
 # Version History
 
+## 0.1.0.dev4
+
+* Developer release (not public to pip)
+* Improve BaseDumper.mode_action() method
+* Improve chunk_query() function
+* Rename queryes -> queries
+* Add debug_info() function
+
 ## 0.1.0.dev3
 
 * Developer release (not public to pip)

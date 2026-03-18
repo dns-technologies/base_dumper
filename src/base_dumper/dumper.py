@@ -50,17 +50,16 @@ def multiquery(dump_method: MethodType):
 
         self: BaseDumper = args[0]
         cursor: AbstractCursor = (kwargs.get("dumper_src") or self).cursor
-        query: str = kwargs.get("query_src") or kwargs.get("query")
+        queries: str = kwargs.get("query_src") or kwargs.get("query")
         part: int = 1
-        first_part, second_part = chunk_query(query)
+        first_part, second_part = chunk_query(queries)
         all_parts = len(sum((first_part, second_part), [])) or int(
             bool(kwargs.get("table_name") or kwargs.get("table_src"))
         )
 
         for query in first_part:
             self.logger.info(f"Execute query {part}/{all_parts}")
-            cursor.execute(query)
-            self.mode_action()
+            self.mode_action(cursor, query)
             part += 1
 
         for key in ("query", "query_src"):
@@ -71,7 +70,7 @@ def multiquery(dump_method: MethodType):
         self.logger.info(
             f"Execute stream {part}/{all_parts} [{self.stream_type} mode]"
         )
-        output = self.mode_action(dump_method, *args, **kwargs)
+        output = self.mode_action(None, dump_method, *args, **kwargs)
 
         if output:
             self.refresh()
@@ -82,8 +81,7 @@ def multiquery(dump_method: MethodType):
         for query in second_part:
             part += 1
             self.logger.info(f"Execute query {part}/{all_parts}")
-            cursor.execute(query)
-            self.mode_action()
+            self.mode_action(cursor, query)
 
         return output
 
@@ -168,15 +166,19 @@ class BaseDumper(ABC):
 
     def mode_action(
         self,
-        dump_method: MethodType | None = None,
+        cursor: AbstractCursor | None = None,
+        action_data: str | MethodType | None = None,
         *args: Any,
         **kwargs: dict[str, Any],
     ) -> None:
         """DumperMode.DEBUG or DumperMode.TEST action.
         Default is do nothing."""
 
-        if dump_method:
-            return dump_method(*args, **kwargs)
+        if cursor:
+            return cursor.execute(action_data)
+
+        if action_data:
+            return action_data(*args, **kwargs)
 
     @multiquery
     @abstractmethod
