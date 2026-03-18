@@ -8,7 +8,6 @@
 * Rename queryes -> queries
 * Add debug_info() function
 * Refactor multiquery() decorator
-* Improve BaseDumper.mode_action()
 
 ## 0.1.0.dev3
 
