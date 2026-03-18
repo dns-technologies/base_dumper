@@ -7,7 +7,7 @@ INFO_TEMPLATE = """Execution query on host {info.host}
 ╞═══════════════╤═════════════════════════╡
 │ Query Kind    │ {info.kind:>23} │
 ├───────────────┼─────────────────────────┤
-│ Duration      │ {info.duration:>15} seconds │
+│ Duration      │ {info.duration:>15g} seconds │
 ├───────────────┼─────────────────────────┤
 │ Memory Usage  │ {info.memory:>17,} bytes │
 ├───────────────┼─────────────────────────┤
