@@ -49,7 +49,7 @@ def multiquery(dump_method: MethodType):
         second_part: list[str]
 
         self: BaseDumper = args[0]
-        cursor: AbstractCursor = (kwargs.get("dumper_src") or self).cursor
+        dumper_src: BaseDumper = kwargs.get("dumper_src") or self
         queries: str = kwargs.get("query_src") or kwargs.get("query")
         part: int = 1
         first_part, second_part = chunk_query(queries)
@@ -59,7 +59,7 @@ def multiquery(dump_method: MethodType):
 
         for query in first_part:
             self.logger.info(f"Execute query {part}/{all_parts}")
-            self.mode_action(cursor, query)
+            dumper_src.mode_action(query)
             part += 1
 
         for key in ("query", "query_src"):
@@ -70,18 +70,18 @@ def multiquery(dump_method: MethodType):
         self.logger.info(
             f"Execute stream {part}/{all_parts} [{self.stream_type} mode]"
         )
-        output = self.mode_action(None, dump_method, *args, **kwargs)
+        output = self.mode_action(dump_method, *args, **kwargs)
 
         if output:
             self.refresh()
 
-        cursor: AbstractCursor = (kwargs.get("dumper_src") or self).cursor
+        dumper_src: BaseDumper = kwargs.get("dumper_src") or self
         collect()
 
         for query in second_part:
             part += 1
             self.logger.info(f"Execute query {part}/{all_parts}")
-            self.mode_action(cursor, query)
+            dumper_src.mode_action(dumper_src, query)
 
         return output
 
@@ -166,7 +166,6 @@ class BaseDumper(ABC):
 
     def mode_action(
         self,
-        cursor: AbstractCursor | None = None,
         action_data: str | MethodType | None = None,
         *args: Any,
         **kwargs: dict[str, Any],
@@ -174,10 +173,9 @@ class BaseDumper(ABC):
         """DumperMode.DEBUG or DumperMode.TEST action.
         Default is do nothing."""
 
-        if cursor:
-            return cursor.execute(action_data)
-
         if action_data:
+            if isinstance(action_data, str):
+                return self.cursor.execute(action_data)
             return action_data(*args, **kwargs)
 
     @multiquery
