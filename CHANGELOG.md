@@ -8,6 +8,9 @@
 * Improve chunk_query() function
 * Improve multiquery() decorator
 * Rename queryes -> queries
+* Rename self.version -> self.`__version__`
+* Add self.version as new parameter
+* Refactor self.logger initialization
 
 ## 0.1.0.dev3
 

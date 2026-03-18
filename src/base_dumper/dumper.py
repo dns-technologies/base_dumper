@@ -104,7 +104,8 @@ class BaseDumper(ABC):
     dbname: str
     is_readonly: bool
     stream_type: str
-    version: str = __version__
+    version: str
+    __version__: str = __version__
 
     def __init__(
         self,
@@ -121,7 +122,7 @@ class BaseDumper(ABC):
 
         if not logger:
             logger_name = self.__class__.__name__
-            version=self.version
+            version = self.__version__
             logger = DumperLogger(logger_name=logger_name, version=version)
 
         self.connector = connector
