@@ -1,30 +1,34 @@
-INFO_TEMPLATE = """
-┌───────────────────────────────────────┐
-│           Query information           │
-╞══════════════╤════════════════════════╡
-│ Kind         │ {0:<22} │
-├──────────────┼────────────────────────┤
-│ Duration     │ {1:<22} │
-├──────────────┼────────────────────────┤
-│ Memory Usage │ {2:<22} │
-├──────────────┼────────────────────────┤
-│ Rows         │ {3:<22} │
-├──────────────┼────────────────────────┤
-│ Bytes        │ {4:<22} │
-└──────────────┴────────────────────────┘
+from typing import NamedTuple
+
+
+INFO_TEMPLATE = """Execution query on host {info.host}
+┌─────────────────────────────────────────┐
+│            Query information            │
+╞═══════════════╤═════════════════════════╡
+│ Query Kind    │ {info.kind:>23} │
+├───────────────┼─────────────────────────┤
+│ Duration      │ {info.duration:>15} seconds │
+├───────────────┼─────────────────────────┤
+│ Memory Usage  │ {info.memory:>17,} bytes │
+├───────────────┼─────────────────────────┤
+│ Storage Usage │ {info.storage:>17,} bytes │
+├───────────────┼─────────────────────────┤
+│ Total Count   │ {info.rows:>18,} rows │
+└───────────────┴─────────────────────────┘
 """
 
 
-def debug_info(
-    kind: str,
-    duration: int,
-    memory_usage: int,
-    rows: int,
-    width: int,
-) -> str:
+class DebugInfo(NamedTuple):
     """Debug information to log."""
 
-    duration_sec = f"{duration} seconds"
-    memory = f"{memory_usage} bytes"
+    host: str
+    kind: str
+    duration: float
+    memory: int = 0
+    storage: int = 0
+    rows: int = 0
 
-    return INFO_TEMPLATE.format(kind, duration_sec, memory, rows, width)
+    def __repr__(self) -> str:
+        """String representation of DebugInfo."""
+
+        return INFO_TEMPLATE.format(info=self)

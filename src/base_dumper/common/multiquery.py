@@ -6,7 +6,7 @@ from re import (
 from sqlparse import format as sql_format
 
 
-EXECUTE_PATTERN = compile(r'^(with|select|show)\s', IGNORECASE)
+EXECUTE_PATTERN = compile(r'^(with|select|show|grant|describe)\s', IGNORECASE)
 QUERY_PATTERN = compile(r";(?=(?:[^']*'[^']*')*[^']*$)")
 STRIP_CHARS = "; \t\n\r"
 

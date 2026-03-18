@@ -81,7 +81,7 @@ def multiquery(dump_method: MethodType):
         for query in second_part:
             part += 1
             self.logger.info(f"Execute query {part}/{all_parts}")
-            dumper_src.mode_action(dumper_src, query)
+            dumper_src.mode_action(query)
 
         return output
 

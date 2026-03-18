@@ -3,11 +3,11 @@
 ## 0.1.0.dev4
 
 * Developer release (not public to pip)
+* Add DebugInfo object
 * Improve BaseDumper.mode_action() method
 * Improve chunk_query() function
+* Improve multiquery() decorator
 * Rename queryes -> queries
-* Add debug_info() function
-* Refactor multiquery() decorator
 
 ## 0.1.0.dev3
 
