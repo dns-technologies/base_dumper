@@ -5,7 +5,8 @@
 * Developer release (not public to pip)
 * Improve DebugInfo object
 * Improve transfer_diagram() function
-* Add table_diagram() function for DumperMode.Test
+* Add log_diagram() function
+* Add table_diagram() function
 * Update README.md
 
 ## 0.1.0.dev4

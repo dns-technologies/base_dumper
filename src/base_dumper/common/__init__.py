@@ -5,6 +5,7 @@ from .connector import DBConnector
 from .cursor import AbstractCursor
 from .diagram import (
     DBMetadata,
+    log_diagram,
     table_diagram,
     transfer_diagram,
 )
@@ -36,6 +37,7 @@ __all__ = (
     "IsolationLevel",
     "Timeout",
     "chunk_query",
+    "log_diagram",
     "random_name",
     "table_diagram",
     "transfer_diagram",

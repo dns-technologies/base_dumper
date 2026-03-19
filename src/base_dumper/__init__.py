@@ -47,6 +47,7 @@ __all__ = (
     "IsolationLevel",
     "Timeout",
     "chunk_query",
+    "log_diagram",
     "multiquery",
     "random_name",
     "table_diagram",

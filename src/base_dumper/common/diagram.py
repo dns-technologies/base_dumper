@@ -1,5 +1,8 @@
 from collections import OrderedDict
+from logging import Logger
 from typing import NamedTuple
+
+from .mode_level import DumperMode
 
 
 class DBMetadata(NamedTuple):
@@ -97,3 +100,22 @@ def table_diagram(metadata: DBMetadata) -> str:
 
     diagram = __format_table(metadata, "Summary")
     return "Result table diagram:\n" + "\n".join(diagram)
+
+
+def log_diagram(
+    logger: Logger,
+    mode: DumperMode,
+    source: DBMetadata,
+    destination: DBMetadata = None,
+) -> None:
+    """Generate diagram log message."""
+
+    if destination:
+        diagram_message = transfer_diagram(source, destination)
+    else:
+        diagram_message = table_diagram(source)
+
+    logger.info(diagram_message)
+
+    if mode is DumperMode.TEST:
+        logger.warning("Write functions are not available in TEST mode.")
