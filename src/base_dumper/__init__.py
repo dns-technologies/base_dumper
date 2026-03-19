@@ -19,6 +19,7 @@ from .common import (
     IsolationLevel,
     Timeout,
     chunk_query,
+    log_diagram,
     random_name,
     table_diagram,
     transfer_diagram,
