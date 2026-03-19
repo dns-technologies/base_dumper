@@ -62,6 +62,7 @@ class MyNewDumper(BaseDumper):
         mode: DumperMode,
         s3fs: bool,
     ):
+        self. __version__ = __version__
         super().__init__(
             connector,
             compression_method,

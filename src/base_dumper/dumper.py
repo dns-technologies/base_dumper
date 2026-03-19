@@ -140,6 +140,7 @@ class BaseDumper(ABC):
             )
 
         # Child dumper must be add initialize params and other settings after:
+        # self. __version__ = __version__
         # super().__init__(
         #     connector,
         #     compression_method,

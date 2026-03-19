@@ -20,6 +20,7 @@ from .common import (
     Timeout,
     chunk_query,
     random_name,
+    table_diagram,
     transfer_diagram,
 )
 from .dumper import (
@@ -48,6 +49,7 @@ __all__ = (
     "chunk_query",
     "multiquery",
     "random_name",
+    "table_diagram",
     "transfer_diagram",
 )
 __author__ = "0xMihalich"

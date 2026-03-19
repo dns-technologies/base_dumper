@@ -14,8 +14,7 @@ INFO_TEMPLATE = """Execution query on host {info.host}
 │ Storage Usage │ {info.storage:>17,} bytes │
 ├───────────────┼─────────────────────────┤
 │ Total Count   │ {info.rows:>18,} rows │
-└───────────────┴─────────────────────────┘
-"""
+└───────────────┴─────────────────────────┘"""
 
 
 class DebugInfo(NamedTuple):

@@ -10,42 +10,55 @@ class DBMetadata(NamedTuple):
     columns: OrderedDict
 
 
-def __truncate_text(text: str, max_length: int) -> str:
-    """Truncate text and add ellipsis if too long."""
-
-    if len(text) > max_length:
-        return text[: max_length - 1] + "…"
-    return text
-
-
 def __format_table(
     metadata: DBMetadata,
     direction: str,
-    table_width: int = 51,
 ) -> list[str]:
     """Format single table as list of lines."""
 
-    lines = []
-
-    title = f"{direction} [{metadata.name} {metadata.version}]"
-    lines.append(f"┌{''.ljust(table_width, '─')}┐")
-    lines.append(
-        f"│ {__truncate_text(title, table_width - 1).ljust(table_width - 1)}│"
-    )
-    lines.append(f"╞{'═' * 25}╤{'═' * 25}╡")
-    lines.append(f"│ {'Column Name'.ljust(23)} │ {'Data Type'.ljust(23)} │")
-    lines.append(f"╞{'═' * 25}╪{'═' * 25}╡")
-
-    for i, (col_name, col_type) in enumerate(metadata.columns.items()):
-        truncated_name = __truncate_text(col_name, 23)
-        truncated_type = __truncate_text(str(col_type), 23)
-        lines.append(
-            f"│ {truncated_name.ljust(23)} │ {truncated_type.ljust(23)} │"
+    if metadata.columns:
+        max_name_len = max(
+            len(col_name) for col_name in metadata.columns.keys()
         )
-        if i < len(metadata.columns) - 1:
-            lines.append(f"├{'─' * 25}┼{'─' * 25}┤")
+        max_type_len = max(
+            len(str(col_type)) for col_type in metadata.columns.values()
+        )
+    else:
+        max_name_len = 0
+        max_type_len = 0
 
-    lines.append(f"└{'─' * 25}┴{'─' * 25}┘")
+    name_width = max(max_name_len, len("Column Name"))
+    type_width = max(max_type_len, len("Data Type"))
+    table_width = name_width + type_width + 7
+    title = f"{direction} [{metadata.name} {metadata.version}]"
+    title_width = len(title) + 4
+
+    if title_width > table_width:
+        extra = title_width - table_width
+        name_width += extra // 2
+        type_width += extra - extra // 2
+        table_width = title_width
+
+    name_header = f"{'Column Name':^{name_width}}"
+    type_header = f"{'Data Type':^{type_width}}"
+
+    lines = [
+        f"┌{'─' * (table_width - 2)}┐",
+        f"│ {title:^{table_width - 4}} │",
+        f"╞{'═' * (name_width + 2)}╤{'═' * (type_width + 2)}╡",
+        f"│ {name_header} │ {type_header} │",
+        f"╞{'═' * (name_width + 2)}╪{'═' * (type_width + 2)}╡",
+    ]
+
+    for col_name, col_type in metadata.columns.items():
+        name_cell = f"{col_name:<{name_width}}"
+        type_cell = f"{str(col_type):>{type_width}}"
+        lines.extend([
+            f"│ {name_cell} │ {type_cell} │",
+            f"├{'─' * (name_width + 2)}┼{'─' * (type_width + 2)}┤",
+        ])
+
+    lines[-1] = f"└{'─' * (name_width + 2)}┴{'─' * (type_width + 2)}┘"
     return lines
 
 
@@ -54,12 +67,13 @@ def transfer_diagram(source: DBMetadata, destination: DBMetadata) -> str:
 
     src_lines = __format_table(source, "Source")
     dest_lines = __format_table(destination, "Destination")
+    src_width = max(len(line) for line in src_lines) if src_lines else 0
+    dest_width = max(len(line) for line in dest_lines) if dest_lines else 0
     max_lines = max(len(src_lines), len(dest_lines), 9)
-
-    src_lines.extend([" " * 53] * (max_lines - len(src_lines)))
-    dest_lines.extend([" " * 53] * (max_lines - len(dest_lines)))
-
+    src_lines.extend([" " * src_width] * (max_lines - len(src_lines)))
+    dest_lines.extend([" " * dest_width] * (max_lines - len(dest_lines)))
     middle_line = max_lines // 2
+
     arrow_config = [
         (middle_line - 3, " │╲   "),
         (middle_line - 2, " │ ╲  "),
@@ -70,9 +84,16 @@ def transfer_diagram(source: DBMetadata, destination: DBMetadata) -> str:
         (middle_line + 3, " │ ╱  "),
         (middle_line + 4, " │╱   "),
     ]
-    arrow_map = {line: arrow for line, arrow in arrow_config}
 
+    arrow_map = {line: arrow for line, arrow in arrow_config}
     return "Transfer data diagram:\n" + "\n".join(
         f"{src_lines[row]} {arrow_map.get(row, '      ')} {dest_lines[row]}"
         for row in range(max_lines)
     )
+
+
+def table_diagram(metadata: DBMetadata) -> str:
+    """Make diagram for sibgle table."""
+
+    diagram = __format_table(metadata, "Summary")
+    return "Result table diagram:\n" + "\n".join(diagram)

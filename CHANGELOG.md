@@ -1,5 +1,13 @@
 # Version History
 
+## 0.1.0.dev5
+
+* Developer release (not public to pip)
+* Improve DebugInfo object
+* Improve transfer_diagram() function
+* Add table_diagram() function for DumperMode.Test
+* Update README.md
+
 ## 0.1.0.dev4
 
 * Developer release (not public to pip)
