@@ -34,8 +34,8 @@ from .common import (
     DumperLogger,
     DumperMode,
     IsolationLevel,
+    Timeout,
     chunk_query,
-    timeouts,
 )
 from .version import __version__
 
@@ -113,7 +113,7 @@ class BaseDumper(ABC):
         compression_method: CompressionMethod = CompressionMethod.ZSTD,
         compression_level: int = CompressionLevel.ZSTD_DEFAULT,
         logger: Logger | None = None,
-        timeout: int = timeouts.DBMS_1_HOUR_TIMEOUT_SEC,
+        timeout: int = Timeout.DBMS_1_HOUR_TIMEOUT_SEC,
         isolation: IsolationLevel = IsolationLevel.committed,
         mode: DumperMode = DumperMode.PROD,
         s3fs: bool = False,

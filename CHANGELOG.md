@@ -11,6 +11,7 @@
 * Rename self.version -> self.`__version__`
 * Add self.version as new parameter
 * Refactor self.logger initialization
+* Rename timeouts -> Timeout
 
 ## 0.1.0.dev3
 

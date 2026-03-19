@@ -17,9 +17,9 @@ from .common import (
     DumperLogger,
     DumperMode,
     IsolationLevel,
+    Timeout,
     chunk_query,
     random_name,
-    timeouts,
     transfer_diagram,
 )
 from .dumper import (
@@ -44,10 +44,10 @@ __all__ = (
     "DumperMode",
     "ExampleReader",
     "IsolationLevel",
+    "Timeout",
     "chunk_query",
     "multiquery",
     "random_name",
-    "timeouts",
     "transfer_diagram",
 )
 __author__ = "0xMihalich"

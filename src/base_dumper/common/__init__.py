@@ -1,6 +1,6 @@
 """Common functions and classes (including abstract classes)."""
 
-from . import timeouts
+from . import timeouts as Timeout
 from .connector import DBConnector
 from .cursor import AbstractCursor
 from .diagram import (
@@ -33,8 +33,8 @@ __all__ = (
     "DumperMode",
     "ExampleReader",
     "IsolationLevel",
+    "Timeout",
     "chunk_query",
     "random_name",
-    "timeouts",
     "transfer_diagram",
 )
