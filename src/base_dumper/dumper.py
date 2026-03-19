@@ -33,6 +33,7 @@ from .common import (
     DBMetadata,
     DumperLogger,
     DumperMode,
+    DumpFormat,
     IsolationLevel,
     Timeout,
     chunk_query,
@@ -49,7 +50,7 @@ def multiquery(dump_method: MethodType):
         second_part: list[str]
 
         self: BaseDumper = args[0]
-        dumper_src: BaseDumper = kwargs.get("dumper_src") or self
+        dumper_src: BaseDumper = kwargs.get("dumper_src", self)
         queries: str = kwargs.get("query_src") or kwargs.get("query")
         part: int = 1
         first_part, second_part = chunk_query(queries)
@@ -72,10 +73,10 @@ def multiquery(dump_method: MethodType):
         )
         output = self.mode_action(dump_method, *args, **kwargs)
 
-        if output:
-            self.refresh()
+        if output and dumper_src.mode is not DumperMode.TEST:
+            dumper_src.refresh()
+            dumper_src: BaseDumper = kwargs.get("dumper_src", self)
 
-        dumper_src: BaseDumper = kwargs.get("dumper_src") or self
         collect()
 
         for query in second_part:
@@ -98,7 +99,7 @@ class BaseDumper(ABC):
     timeout: int
     isolation: IsolationLevel
     mode: DumperMode
-    s3fs: bool
+    dump_format: DumpFormat
     dbmeta: DBMetadata | None
     cursor: AbstractCursor
     dbname: str
@@ -116,7 +117,7 @@ class BaseDumper(ABC):
         timeout: int = Timeout.DBMS_1_HOUR_TIMEOUT_SEC,
         isolation: IsolationLevel = IsolationLevel.committed,
         mode: DumperMode = DumperMode.PROD,
-        s3fs: bool = False,
+        dump_format: DumpFormat = DumpFormat.RAW,
     ) -> None:
         """Class initialization."""
 
@@ -130,7 +131,7 @@ class BaseDumper(ABC):
         self.compression_level = compression_level
         self.logger = logger
         self.mode = mode
-        self.s3fs = s3fs
+        self.dump_format = dump_format
         self._timeout = timeout
         self._isolation = isolation
 
@@ -149,7 +150,7 @@ class BaseDumper(ABC):
         #     timeout,
         #     isolation,
         #     mode,
-        #     s3fs,
+        #     dump_format,
         # )
         # ... # <- child dumper __init__ code here
 

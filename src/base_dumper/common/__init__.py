@@ -3,6 +3,7 @@
 from . import timeouts as Timeout
 from .connector import DBConnector
 from .cursor import AbstractCursor
+from .dump_format import DumpFormat
 from .diagram import (
     DBMetadata,
     log_diagram,
@@ -33,6 +34,7 @@ __all__ = (
     "DebugInfo",
     "DumperLogger",
     "DumperMode",
+    "DumpFormat",
     "ExampleReader",
     "IsolationLevel",
     "Timeout",

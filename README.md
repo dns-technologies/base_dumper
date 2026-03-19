@@ -47,6 +47,7 @@ from base_dumper import (
     CompressionMethod,
     DBConnector,
     DumperMode,
+    DumpFormat,
     IsolationLevel,
 )
 
@@ -60,7 +61,7 @@ class MyNewDumper(BaseDumper):
         timeout: int,
         isolation: IsolationLevel,
         mode: DumperMode,
-        s3fs: bool,
+        dump_format: DumpFormat,
     ):
         self. __version__ = __version__
         super().__init__(
@@ -71,7 +72,7 @@ class MyNewDumper(BaseDumper):
             timeout,
             isolation,
             mode,
-            s3fs,
+            dump_format,
         )
         # Implement MyNewDumper init
         ...

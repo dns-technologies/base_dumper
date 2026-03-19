@@ -5,8 +5,12 @@
 * Developer release (not public to pip)
 * Improve DebugInfo object
 * Improve transfer_diagram() function
+* Improve multiquery decorator
 * Add log_diagram() function
 * Add table_diagram() function
+* Add DumpFormat enum
+* Add BaseDumper.dump_format parameter
+* Remove BaseDumper.s3fs parameter
 * Update README.md
 
 ## 0.1.0.dev4
