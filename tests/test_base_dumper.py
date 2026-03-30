@@ -395,5 +395,6 @@ class TestBaseDumperProperties:
 
         assert hasattr(concrete_dumper, "is_between")  # noqa: S101
 
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
