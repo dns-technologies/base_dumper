@@ -1,5 +1,18 @@
 # Version History
 
+## 0.2.0.dev0
+
+* Developer release (not public to pip)
+* Add depends csvpack==0.1.0.dev2
+* Update depends light-compressor==0.1.1.dev1
+* Change DumpFormat keys to binary and csv
+* Change BaseDumper.stream_type parameter to property method
+* Add BaseDumper.s3_file boolean parameter. Default value is False
+* Add csvpack imports
+* Add pytest
+* Remove pip.ini from root directory
+* Update README.md
+
 ## 0.1.0.dev5
 
 * Developer release (not public to pip)

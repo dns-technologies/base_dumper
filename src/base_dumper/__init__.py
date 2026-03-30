@@ -1,5 +1,19 @@
 """Abstract class and base common modules for dbhose-airflow dumpers."""
 
+from csvpack import (
+    CSVPackError,
+    CSVPackHeaderError,
+    CSVPackMeta,
+    CSVPackMetadataCrcError,
+    CSVPackMetadataError,
+    CSVPackModeError,
+    CSVPackReader,
+    CSVPackTypeError,
+    CSVPackValueError,
+    CSVPackWriter,
+    CSVReader,
+    CSVWriter,
+)
 from light_compressor import (
     CompressionLevel,
     CompressionMethod,
@@ -40,6 +54,18 @@ __all__ = (
     "BaseDumperValueError",
     "CompressionLevel",
     "CompressionMethod",
+    "CSVPackError",
+    "CSVPackHeaderError",
+    "CSVPackMeta",
+    "CSVPackMetadataCrcError",
+    "CSVPackMetadataError",
+    "CSVPackModeError",
+    "CSVPackReader",
+    "CSVPackTypeError",
+    "CSVPackValueError",
+    "CSVPackWriter",
+    "CSVReader",
+    "CSVWriter",
     "DBConnector",
     "DBMetadata",
     "DebugInfo",

@@ -62,6 +62,7 @@ class MyNewDumper(BaseDumper):
         isolation: IsolationLevel,
         mode: DumperMode,
         dump_format: DumpFormat,
+        s3_file: bool,
     ):
         self. __version__ = __version__
         super().__init__(
@@ -73,6 +74,7 @@ class MyNewDumper(BaseDumper):
             isolation,
             mode,
             dump_format,
+            s3_file,
         )
         # Implement MyNewDumper init
         ...

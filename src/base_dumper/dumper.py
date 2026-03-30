@@ -36,6 +36,7 @@ from .common import (
     DumpFormat,
     IsolationLevel,
     Timeout,
+    STREAM_TYPE,
     chunk_query,
 )
 from .version import __version__
@@ -104,7 +105,6 @@ class BaseDumper(ABC):
     cursor: AbstractCursor
     dbname: str
     is_readonly: bool
-    stream_type: str
     version: str
     __version__: str = __version__
 
@@ -117,7 +117,8 @@ class BaseDumper(ABC):
         timeout: int = Timeout.DBMS_1_HOUR_TIMEOUT_SEC,
         isolation: IsolationLevel = IsolationLevel.committed,
         mode: DumperMode = DumperMode.PROD,
-        dump_format: DumpFormat = DumpFormat.RAW,
+        dump_format: DumpFormat = DumpFormat.binary,
+        s3_file: bool = False,
     ) -> None:
         """Class initialization."""
 
@@ -132,6 +133,7 @@ class BaseDumper(ABC):
         self.logger = logger
         self.mode = mode
         self.dump_format = dump_format
+        self.s3_file = s3_file
         self._timeout = timeout
         self._isolation = isolation
 
@@ -151,8 +153,18 @@ class BaseDumper(ABC):
         #     isolation,
         #     mode,
         #     dump_format,
+        #     s3_file,
         # )
         # ... # <- child dumper __init__ code here
+
+    @property
+    def stream_type(self) -> str:
+        """Property method for get stream object type."""
+
+        if self.dump_format is DumpFormat.binary:
+            return STREAM_TYPE.get(self.dbname, self.dump_format.name)
+
+        return self.dump_format.name
 
     @property
     def timeout(self) -> int:

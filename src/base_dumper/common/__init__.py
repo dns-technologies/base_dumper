@@ -22,6 +22,7 @@ from .logger import DumperLogger
 from .mode_level import DumperMode
 from .multiquery import chunk_query
 from .reader import ExampleReader
+from .stream import STREAM_TYPE
 
 
 __all__ = (
@@ -38,6 +39,7 @@ __all__ = (
     "ExampleReader",
     "IsolationLevel",
     "Timeout",
+    "STREAM_TYPE",
     "chunk_query",
     "log_diagram",
     "random_name",
