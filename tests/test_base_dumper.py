@@ -349,7 +349,7 @@ class TestBaseDumperProperties:
 
         assert concrete_dumper.connector is not None  # noqa: S101
 
-    def test_stream_type_binary( self, concrete_dumper: ConcreteDumper):
+    def test_stream_type_binary(self, concrete_dumper: ConcreteDumper):
         """Test stream_type returns correct binary
         format for any databases."""
 
@@ -370,8 +370,7 @@ class TestBaseDumperProperties:
         concrete_dumper.dbname = "duckdb"
         assert concrete_dumper.stream_type == "binary"  # noqa: S101
 
-
-    def test_stream_type_csv( self, concrete_dumper: ConcreteDumper):
+    def test_stream_type_csv(self, concrete_dumper: ConcreteDumper):
         """Test stream_type returns csv format for any databases."""
 
         concrete_dumper.dump_format = DumpFormat.csv
