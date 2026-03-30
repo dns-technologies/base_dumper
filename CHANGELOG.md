@@ -5,11 +5,17 @@
 * Developer release (not public to pip)
 * Add depends csvpack==0.1.0.dev2
 * Update depends light-compressor==0.1.1.dev1
-* Change DumpFormat keys to binary and csv
+* Change DumpFormat keys to `BINARY` and `CSV`
 * Change BaseDumper.stream_type parameter to property method
 * Add BaseDumper.s3_file boolean parameter. Default value is False
+* Add BaseDumper.is_between boolean parameter. Default value is False
 * Add csvpack imports
 * Add pytest
+* Rename BaseDumper.`__version__` to BaseDumper.dumper_version
+* Rename multiquery.py to query_parts.py
+* Refactor multiquery() decorator
+* Refactor BaseDumper.from_pandas() method
+* Refactor EXECUTE_PATTERN (change quote to double quote)
 * Remove pip.ini from root directory
 * Update README.md
 

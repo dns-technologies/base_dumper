@@ -72,20 +72,15 @@ def multiquery(dump_method: MethodType):
         self.logger.info(
             f"Execute stream {part}/{all_parts} [{self.stream_type} mode]"
         )
-        output = self.mode_action(dump_method, *args, **kwargs)
+        try:
+            yield self.mode_action(dump_method, *args, **kwargs)
+        finally:
+            collect()
 
-        if output and dumper_src.mode is not DumperMode.TEST:
-            dumper_src.refresh()
-            dumper_src: BaseDumper = kwargs.get("dumper_src", self)
-
-        collect()
-
-        for query in second_part:
-            part += 1
-            self.logger.info(f"Execute query {part}/{all_parts}")
-            dumper_src.mode_action(query)
-
-        return output
+            for query in second_part:
+                part += 1
+                self.logger.info(f"Execute query {part}/{all_parts}")
+                dumper_src.mode_action(query)
 
     return wrapper
 
@@ -106,7 +101,8 @@ class BaseDumper(ABC):
     dbname: str
     is_readonly: bool
     version: str
-    __version__: str = __version__
+    dumper_version: str = __version__
+    is_between: bool = False
 
     def __init__(
         self,
@@ -117,14 +113,14 @@ class BaseDumper(ABC):
         timeout: int = Timeout.DBMS_1_HOUR_TIMEOUT_SEC,
         isolation: IsolationLevel = IsolationLevel.committed,
         mode: DumperMode = DumperMode.PROD,
-        dump_format: DumpFormat = DumpFormat.binary,
+        dump_format: DumpFormat = DumpFormat.BINARY,
         s3_file: bool = False,
     ) -> None:
         """Class initialization."""
 
         if not logger:
             logger_name = self.__class__.__name__
-            version = self.__version__
+            version = self.dumper_version
             logger = DumperLogger(logger_name=logger_name, version=version)
 
         self.connector = connector
@@ -143,7 +139,7 @@ class BaseDumper(ABC):
             )
 
         # Child dumper must be add initialize params and other settings after:
-        # self. __version__ = __version__
+        # self.dumper_version = __version__
         # super().__init__(
         #     connector,
         #     compression_method,
@@ -161,10 +157,10 @@ class BaseDumper(ABC):
     def stream_type(self) -> str:
         """Property method for get stream object type."""
 
-        if self.dump_format is DumpFormat.binary:
-            return STREAM_TYPE.get(self.dbname, self.dump_format.name)
+        if self.dump_format is DumpFormat.BINARY:
+            return STREAM_TYPE.get(self.dbname, self.dump_format.name.lower())
 
-        return self.dump_format.name
+        return self.dump_format.name.lower()
 
     @property
     def timeout(self) -> int:
@@ -231,11 +227,11 @@ class BaseDumper(ABC):
     ) -> bool:
         """Read dump from Server."""
 
-        return self._read_dump(
+        return next(self._read_dump(
             fileobj=fileobj,
             query=query,
             table_name=table_name,
-        )
+        ))
 
     @abstractmethod
     def write_dump(
@@ -254,12 +250,12 @@ class BaseDumper(ABC):
     ) -> bool:
         """Write stream between Servers."""
 
-        return self._write_between(
+        return next(self._write_between(
             table_dest=table_dest,
             table_src=table_src,
             query_src=query_src,
             dumper_src=dumper_src,
-        )
+        ))
 
     def to_reader(
         self,
@@ -268,10 +264,10 @@ class BaseDumper(ABC):
     ) -> ExampleReader:
         """Get stream from Server as stream object."""
 
-        return self._to_reader(
+        return next(self._to_reader(
             query=query,
             table_name=table_name,
-        )
+        ))
 
     @abstractmethod
     def from_rows(
@@ -290,7 +286,7 @@ class BaseDumper(ABC):
         """Write from pandas.DataFrame into Server object."""
 
         self.from_rows(
-            dtype_data=iter(data_frame.values),
+            dtype_data=data_frame.itertuples(index=False),
             table_name=table_name,
             source=DBMetadata(
                 name="pandas",

@@ -48,12 +48,12 @@ class TestDumpFormat:
     """Тесты для DumpFormat enum."""
 
     def test_values(self):
-        assert DumpFormat.binary.value == 0  # noqa: S101
-        assert DumpFormat.csv.value == 1  # noqa: S101
+        assert DumpFormat.BINARY.value == 0  # noqa: S101
+        assert DumpFormat.CSV.value == 1  # noqa: S101
 
     def test_names(self):
-        assert DumpFormat.binary.name == "binary"  # noqa: S101
-        assert DumpFormat.csv.name == "csv"  # noqa: S101
+        assert DumpFormat.BINARY.name == "BINARY"  # noqa: S101
+        assert DumpFormat.CSV.name == "CSV"  # noqa: S101
 
 
 class TestIsolationLevel:

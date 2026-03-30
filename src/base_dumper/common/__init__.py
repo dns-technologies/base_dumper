@@ -20,7 +20,7 @@ from .info import DebugInfo
 from .isolations import IsolationLevel
 from .logger import DumperLogger
 from .mode_level import DumperMode
-from .multiquery import chunk_query
+from .query_parts import chunk_query
 from .reader import ExampleReader
 from .stream import STREAM_TYPE
 

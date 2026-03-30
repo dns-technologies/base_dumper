@@ -114,7 +114,7 @@ def concrete_dumper(base_connector, mock_logger):
         timeout=30,
         isolation=IsolationLevel.committed,
         mode=DumperMode.PROD,
-        dump_format=DumpFormat.binary,
+        dump_format=DumpFormat.BINARY,
     )
 
 
@@ -166,7 +166,7 @@ class TestBaseDumperInitialization:
             timeout=60,
             isolation=IsolationLevel.repeatable,
             mode=DumperMode.DEBUG,
-            dump_format=DumpFormat.csv,
+            dump_format=DumpFormat.CSV,
         )
         assert dumper.connector == base_connector  # noqa: S101
         assert dumper.compression_method == CompressionMethod.GZIP  # noqa: S101
@@ -175,7 +175,7 @@ class TestBaseDumperInitialization:
         assert dumper.timeout == 60  # noqa: S101
         assert dumper.isolation == IsolationLevel.repeatable  # noqa: S101
         assert dumper.mode == DumperMode.DEBUG  # noqa: S101
-        assert dumper.dump_format == DumpFormat.csv  # noqa: S101
+        assert dumper.dump_format == DumpFormat.CSV  # noqa: S101
 
     def test_init_with_defaults(self, base_connector, mock_logger):
         """Test initialization with defaults."""
@@ -186,7 +186,7 @@ class TestBaseDumperInitialization:
         assert dumper.timeout == 3600  # noqa: S101
         assert dumper.isolation == IsolationLevel.committed  # noqa: S101
         assert dumper.mode == DumperMode.PROD  # noqa: S101
-        assert dumper.dump_format == DumpFormat.binary  # noqa: S101
+        assert dumper.dump_format == DumpFormat.BINARY  # noqa: S101
 
     def test_init_without_connector(self):
         """Test initialization without connector."""
@@ -336,8 +336,8 @@ class TestBaseDumperProperties:
     def test_version_property(self, concrete_dumper: ConcreteDumper):
         """Test that version is defined."""
 
-        assert isinstance(concrete_dumper.__version__, str)  # noqa: S101
-        assert len(concrete_dumper.__version__) > 0  # noqa: S101
+        assert isinstance(concrete_dumper.dumper_version, str)  # noqa: S101
+        assert len(concrete_dumper.dumper_version) > 0  # noqa: S101
 
     def test_dumper_has_logger(self, concrete_dumper: ConcreteDumper):
         """Test that dumper has logger attribute."""
@@ -353,7 +353,7 @@ class TestBaseDumperProperties:
         """Test stream_type returns correct binary
         format for any databases."""
 
-        concrete_dumper.dump_format = DumpFormat.binary
+        concrete_dumper.dump_format = DumpFormat.BINARY
         # PostgreSQL
         concrete_dumper.dbname = "postgres"
         assert concrete_dumper.stream_type == "pgcopy"  # noqa: S101
@@ -373,7 +373,7 @@ class TestBaseDumperProperties:
     def test_stream_type_csv(self, concrete_dumper: ConcreteDumper):
         """Test stream_type returns csv format for any databases."""
 
-        concrete_dumper.dump_format = DumpFormat.csv
+        concrete_dumper.dump_format = DumpFormat.CSV
         # PostgreSQL
         concrete_dumper.dbname = "postgres"
         assert concrete_dumper.stream_type == "csv"  # noqa: S101
@@ -390,6 +390,10 @@ class TestBaseDumperProperties:
         concrete_dumper.dbname = "duckdb"
         assert concrete_dumper.stream_type == "csv"  # noqa: S101
 
+    def test_is_between_parameter(self, concrete_dumper: ConcreteDumper):
+        """Test dumper has is_between parameter."""
+
+        assert hasattr(concrete_dumper, "is_between")  # noqa: S101
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

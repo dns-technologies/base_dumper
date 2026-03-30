@@ -64,7 +64,7 @@ class MyNewDumper(BaseDumper):
         dump_format: DumpFormat,
         s3_file: bool,
     ):
-        self. __version__ = __version__
+        self.dumper_version = __version__
         super().__init__(
             connector,
             compression_method,
