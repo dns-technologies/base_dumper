@@ -20,7 +20,11 @@ from .info import DebugInfo
 from .isolations import IsolationLevel
 from .logger import DumperLogger
 from .mode_level import DumperMode
-from .query_parts import chunk_query
+from .query_parts import (
+    chunk_query,
+    get_query_kind,
+    query_formatter,
+)
 from .reader import ExampleReader
 from .stream import STREAM_TYPE
 
@@ -41,6 +45,8 @@ __all__ = (
     "Timeout",
     "STREAM_TYPE",
     "chunk_query",
+    "get_query_kind",
+    "query_formatter",
     "log_diagram",
     "random_name",
     "table_diagram",

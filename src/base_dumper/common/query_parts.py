@@ -3,12 +3,24 @@ from re import (
     IGNORECASE,
 )
 
-from sqlparse import format as sql_format
+from sqlparse import (
+    format as sql_format,
+    parse,
+)
 
 
 EXECUTE_PATTERN = compile(r"^(with|select|show|grant|describe)\s", IGNORECASE)
 QUERY_PATTERN = compile(r";(?=(?:[^']*'[^']*')*[^']*$)")
 STRIP_CHARS = "; \t\n\r"
+
+
+def get_query_kind(query: str) -> str:
+    """Get kind of query."""
+
+    try:
+        return parse(query)[0].get_type().capitalize()
+    except IndexError:
+        return "Unknown"
 
 
 def query_formatter(queries: str) -> str:

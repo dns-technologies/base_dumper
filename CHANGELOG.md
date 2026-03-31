@@ -11,6 +11,8 @@
 * Add BaseDumper.is_between boolean parameter. Default value is False
 * Add csvpack imports
 * Add pytest
+* Add query_kind() function
+* Add get_query_kind() and query_formatter() to imports
 * Rename BaseDumper.`__version__` to BaseDumper.dumper_version
 * Rename multiquery.py to query_parts.py
 * Refactor multiquery() decorator
