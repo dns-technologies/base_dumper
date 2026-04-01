@@ -256,7 +256,7 @@ class BaseDumper(ABC):
         do_compress_read = source_compressed and not destination_compressed
         do_compress_write = (
             (not source_compressed and destination_compressed)
-            or (source_compressed and destination_compressed \
+            or (source_compressed and destination_compressed
                 and dumper_src.compression_method != self.compression_method)
         )
 
