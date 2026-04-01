@@ -254,9 +254,11 @@ class BaseDumper(ABC):
         source_compressed = dumper_src.with_compression
         destination_compressed = self.with_compression
         do_compress_read = source_compressed and not destination_compressed
-        do_compress_write = ((not source_compressed and destination_compressed)
-            or (source_compressed and destination_compressed and
-            dumper_src.compression_method != self.compression_method))
+        do_compress_write = (
+            (not source_compressed and destination_compressed)
+            or (source_compressed and destination_compressed \
+                and dumper_src.compression_method != self.compression_method)
+        )
 
         if (
             self.stream_type is dumper_src.stream_type
