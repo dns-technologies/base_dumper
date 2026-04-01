@@ -20,11 +20,11 @@ from light_compressor import (
 )
 
 from .common import (
-    AbstractCursor,
-    ExampleReader,
     BaseDumperError,
     BaseDumperTypeError,
     BaseDumperValueError,
+    CSVStreamReader,
+    CursorType,
     DBConnector,
     DBMetadata,
     DebugInfo,
@@ -32,7 +32,9 @@ from .common import (
     DumperMode,
     DumpFormat,
     IsolationLevel,
+    ReaderType,
     Timeout,
+    WriterType,
     chunk_query,
     get_query_kind,
     query_formatter,
@@ -43,13 +45,14 @@ from .common import (
 )
 from .dumper import (
     BaseDumper,
+    chunk_bytes,
     multiquery,
 )
 from .version import __version__
 
+
 __all__ = (
     "__version__",
-    "AbstractCursor",
     "BaseDumper",
     "BaseDumperError",
     "BaseDumperTypeError",
@@ -67,7 +70,9 @@ __all__ = (
     "CSVPackValueError",
     "CSVPackWriter",
     "CSVReader",
+    "CSVStreamReader",
     "CSVWriter",
+    "CursorType",
     "DBConnector",
     "DBMetadata",
     "DebugInfo",
@@ -76,7 +81,10 @@ __all__ = (
     "DumpFormat",
     "ExampleReader",
     "IsolationLevel",
+    "ReaderType",
     "Timeout",
+    "WriterType",
+    "chunk_bytes",
     "chunk_query",
     "get_query_kind",
     "query_formatter",

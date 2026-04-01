@@ -3,6 +3,10 @@ from abc import (
     abstractmethod,
 )
 from collections import OrderedDict
+from collections.abc import (
+    Generator,
+    Iterable,
+)
 from gc import collect
 from io import (
     BufferedReader,
@@ -12,13 +16,15 @@ from logging import Logger
 from types import MethodType
 from typing import (
     Any,
-    Iterable,
     Optional,
 )
 
+from csvpack.common.sizes import CHUNK_SIZE
 from light_compressor import (
     CompressionLevel,
     CompressionMethod,
+    define_reader,
+    define_writer,
 )
 from pandas import DataFrame as PdFrame
 from polars import (
@@ -27,13 +33,13 @@ from polars import (
 )
 
 from .common import (
-    AbstractCursor,
-    ExampleReader,
+    CursorType,
     DBConnector,
     DBMetadata,
     DumperLogger,
     DumperMode,
     DumpFormat,
+    ReaderType,
     IsolationLevel,
     Timeout,
     STREAM_TYPE,
@@ -85,6 +91,13 @@ def multiquery(dump_method: MethodType):
     return wrapper
 
 
+def chunk_bytes(fileobj: BufferedReader) -> Generator[bytes, None, None]:
+    """Chunk fileobj generator."""
+
+    while chunk := fileobj.read(CHUNK_SIZE):
+        yield chunk
+
+
 class BaseDumper(ABC):
     """Abstract dumper class."""
 
@@ -97,11 +110,12 @@ class BaseDumper(ABC):
     mode: DumperMode
     dump_format: DumpFormat
     dbmeta: DBMetadata | None
-    cursor: AbstractCursor
+    cursor: CursorType
     dbname: str
     is_readonly: bool
     version: str
     dumper_version: str = __version__
+    with_compression: bool = False
     is_between: bool = False
 
     def __init__(
@@ -153,6 +167,22 @@ class BaseDumper(ABC):
         # )
         # ... # <- child dumper __init__ code here
 
+    def __enter__(self) -> "BaseDumper":
+        """Context manager entry."""
+
+        return self
+
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: Any | None,
+    ) -> None:
+        """Context manager exit."""
+
+        _ = exc_type, exc_val, exc_tb
+        self.close()
+
     @property
     def stream_type(self) -> str:
         """Property method for get stream object type."""
@@ -189,6 +219,14 @@ class BaseDumper(ABC):
                 return self.cursor.execute(action_data)
             return action_data(*args, **kwargs)
 
+    @abstractmethod
+    def metadata(
+        self,
+        query: str | None = None,
+        table_name: str | None = None,
+    ) -> DBMetadata:
+        """Read metadata from Server."""
+
     @multiquery
     @abstractmethod
     def _read_dump(
@@ -196,19 +234,64 @@ class BaseDumper(ABC):
         fileobj: BufferedWriter,
         query: str | None,
         table_name: str | None,
-    ) -> bool:
+    ) -> None:
         """Internal method read_dump for generate kwargs to decorator."""
 
     @multiquery
-    @abstractmethod
     def _write_between(
         self,
         table_dest: str,
         table_src: str | None,
         query_src: str | None,
         dumper_src: Optional["BaseDumper"],
-    ) -> bool:
+    ) -> None:
         """Internal method write_between for generate kwargs to decorator."""
+
+        if not dumper_src:
+            dumper_src = self
+
+        dumper_src.is_between = True
+        source_compressed = dumper_src.with_compression
+        destination_compressed = self.with_compression
+        do_compress_read = source_compressed and not destination_compressed
+        do_compress_write = (
+            (not source_compressed and destination_compressed) or
+            (source_compressed and destination_compressed and
+            dumper_src.compression_method != self.compression_method)
+        )
+
+        if (
+            self.stream_type is dumper_src.stream_type
+            and self.stream_type != "binary"
+        ):
+            self.from_fileobj(
+                fileobj=dumper_src.to_fileobj(
+                    query=query_src,
+                    table_name=table_src,
+                    do_compress_action=do_compress_read,
+                ),
+                table_name=table_dest,
+                do_compress_action=do_compress_write,
+            )
+        else:
+            source = dumper_src.metadata(
+                    query=query_src,
+                    table_name=table_src,
+            )
+            reader = dumper_src.to_reader(
+                    query=query_src,
+                    table_name=table_src,
+            )
+            dtype_data = reader.to_rows()
+            self.from_rows(
+                dtype_data=dtype_data,
+                table_name=table_dest,
+                source=source,
+            )
+            reader.close()
+            collect()
+
+        dumper_src.is_between = False
 
     @multiquery
     @abstractmethod
@@ -216,15 +299,24 @@ class BaseDumper(ABC):
         self,
         query: str | None,
         table_name: str | None,
-    ) -> ExampleReader:
+    ) -> ReaderType:
         """Internal method to_reader for generate kwargs to decorator."""
+
+    @multiquery
+    @abstractmethod
+    def _to_fileobj(
+        self,
+        query: str | None,
+        table_name: str | None,
+    ) -> BufferedReader:
+        """Internal method to_fileobj for generate kwargs to decorator."""
 
     def read_dump(
         self,
         fileobj: BufferedWriter,
         query: str | None = None,
         table_name: str | None = None,
-    ) -> bool:
+    ) -> None:
         """Read dump from Server."""
 
         return next(self._read_dump(
@@ -247,7 +339,7 @@ class BaseDumper(ABC):
         table_src: str | None = None,
         query_src: str | None = None,
         dumper_src: Optional["BaseDumper"] = None,
-    ) -> bool:
+    ) -> None:
         """Write stream between Servers."""
 
         return next(self._write_between(
@@ -261,13 +353,35 @@ class BaseDumper(ABC):
         self,
         query: str | None = None,
         table_name: str | None = None,
-    ) -> ExampleReader:
+    ) -> ReaderType:
         """Get stream from Server as stream object."""
 
         return next(self._to_reader(
             query=query,
             table_name=table_name,
         ))
+
+    def to_fileobj(
+        self,
+        query: str | None = None,
+        table_name: str | None = None,
+        compression_method: CompressionMethod | None = None,
+        do_compress_action: bool = False,
+    ) -> BufferedReader:
+        """Get stream from Server as file object."""
+
+        if not compression_method:
+            compression_method = self.compression_method
+
+        fileobj = next(self._to_fileobj(
+            query=query,
+            table_name=table_name,
+        ))
+
+        if do_compress_action:
+            return define_reader(fileobj, compression_method)
+
+        return fileobj
 
     @abstractmethod
     def from_rows(
@@ -325,6 +439,37 @@ class BaseDumper(ABC):
                 )),
             )
         )
+
+    @abstractmethod
+    def from_bytes(
+        self,
+        bytes_data: Iterable[bytes],
+        table_name: str,
+    ) -> None:
+        """Write from iterable bytes into Server object."""
+
+    def from_fileobj(
+        self,
+        fileobj: BufferedReader,
+        table_name: str,
+        compression_method: CompressionMethod | None = None,
+        do_compress_action: bool = False,
+    ) -> None:
+        """Write from file object into Server object."""
+
+        if not compression_method:
+            compression_method = self.compression_method
+
+        bytes_data = chunk_bytes(fileobj)
+
+        if do_compress_action:
+            bytes_data = define_writer(
+                bytes_data,
+                self.compression_method,
+                self.compression_level,
+            )
+
+        self.from_bytes(bytes_data, table_name)
 
     @abstractmethod
     def refresh(self) -> None:

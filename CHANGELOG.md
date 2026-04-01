@@ -1,5 +1,19 @@
 # Version History
 
+## 0.2.0.dev1
+
+* Developer release (not public to pip)
+* Add DBMetadata.close() method as patch
+* Add DBMetadata.tell() method as patch
+* Add depends csvpack==0.1.0.dev3
+* Remove AbstractCursor class
+* Remove ExampleReader class
+* Add CursorType, ReaderType and WriterType types
+* Refactor BaseDumper
+* Add new methods
+* Add chunk_bytes() function
+* Add CSVStreamReader object
+
 ## 0.2.0.dev0
 
 * Developer release (not public to pip)
@@ -11,7 +25,7 @@
 * Add BaseDumper.is_between boolean parameter. Default value is False
 * Add csvpack imports
 * Add pytest
-* Add query_kind() function
+* Add get_query_kind() function
 * Add get_query_kind() and query_formatter() to imports
 * Rename BaseDumper.`__version__` to BaseDumper.dumper_version
 * Rename multiquery.py to query_parts.py

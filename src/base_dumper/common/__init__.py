@@ -2,7 +2,6 @@
 
 from . import timeouts as Timeout
 from .connector import DBConnector
-from .cursor import AbstractCursor
 from .dump_format import DumpFormat
 from .diagram import (
     DBMetadata,
@@ -25,24 +24,33 @@ from .query_parts import (
     get_query_kind,
     query_formatter,
 )
-from .reader import ExampleReader
-from .stream import STREAM_TYPE
+from .types import (
+    CursorType,
+    ReaderType,
+    WriterType,
+)
+from .stream import (
+    CSVStreamReader,
+    STREAM_TYPE,
+)
 
 
 __all__ = (
-    "AbstractCursor",
     "BaseDumperError",
     "BaseDumperTypeError",
     "BaseDumperValueError",
+    "CSVStreamReader",
+    "CursorType",
     "DBConnector",
     "DBMetadata",
     "DebugInfo",
     "DumperLogger",
     "DumperMode",
     "DumpFormat",
-    "ExampleReader",
     "IsolationLevel",
+    "ReaderType",
     "Timeout",
+    "WriterType",
     "STREAM_TYPE",
     "chunk_query",
     "get_query_kind",

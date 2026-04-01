@@ -12,6 +12,9 @@ class DBMetadata(NamedTuple):
     version: str
     columns: OrderedDict
 
+    def close(self) -> None: ...
+    def tell(self) -> int: return 0
+
 
 def __format_table(
     metadata: DBMetadata,
