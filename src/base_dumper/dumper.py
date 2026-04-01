@@ -247,10 +247,6 @@ class BaseDumper(ABC):
     ) -> None:
         """Internal method write_between for generate kwargs to decorator."""
 
-        if not dumper_src:
-            dumper_src = self
-
-        dumper_src.is_between = True
         source_compressed = dumper_src.with_compression
         destination_compressed = self.with_compression
         do_compress_read = source_compressed and not destination_compressed
@@ -290,8 +286,6 @@ class BaseDumper(ABC):
             )
             reader.close()
             collect()
-
-        dumper_src.is_between = False
 
     @multiquery
     @abstractmethod
@@ -342,12 +336,17 @@ class BaseDumper(ABC):
     ) -> None:
         """Write stream between Servers."""
 
-        return next(self._write_between(
+        if not dumper_src:
+            dumper_src = self
+
+        dumper_src.is_between = True
+        next(self._write_between(
             table_dest=table_dest,
             table_src=table_src,
             query_src=query_src,
             dumper_src=dumper_src,
         ))
+        dumper_src.is_between = False
 
     def to_reader(
         self,
