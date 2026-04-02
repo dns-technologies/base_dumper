@@ -19,6 +19,7 @@ class DBMetadata(NamedTuple):
     def close(self) -> None: ...
     def tell(self) -> int: return 0
 
+
 def __format_table(
     metadata: DBMetadata,
     direction: str,
