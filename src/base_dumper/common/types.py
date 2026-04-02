@@ -99,6 +99,12 @@ class DumperType(Protocol):
     def refresh(self) -> None: ...
     def close(self) -> None: ...
 
+    @staticmethod
+    def _db_meta_from_iter(
+        dtype_data: Iterable[Any],
+        max_rows: int = 100,
+    ) -> tuple[DBMetadata, Generator[Any, Any, Any]]: ...
+
     def mode_action(
         self,
         action_data: str | MethodType | None = None,

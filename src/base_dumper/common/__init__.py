@@ -1,6 +1,10 @@
 """Common functions and classes (including abstract classes)."""
 
 from . import timeouts as Timeout
+from .associate import (
+    db_meta_from_iter,
+    repair_dtype_data,
+)
 from .connector import DBConnector
 from .dump_format import DumpFormat
 from .diagram import (
@@ -55,10 +59,12 @@ __all__ = (
     "WriterType",
     "STREAM_TYPE",
     "chunk_query",
+    "db_meta_from_iter",
     "get_query_kind",
     "query_formatter",
     "log_diagram",
     "random_name",
+    "repair_dtype_data",
     "table_diagram",
     "transfer_diagram",
 )

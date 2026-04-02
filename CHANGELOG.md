@@ -1,5 +1,16 @@
 # Version History
 
+## 0.2.0.dev2
+
+* Developer release (not public to pip)
+* Add db_meta_from_iter() function
+* Add BaseDumper._db_meta_from_iter() static method
+* Revision DumperType
+* Add BaseDumper._db_meta_from_iter() static method
+* Refactor BaseDumper._write_between() method
+* Update pytests
+* Update README.md
+
 ## 0.2.0.dev1
 
 * Developer release (not public to pip)

@@ -42,6 +42,7 @@ from .common import (
     Timeout,
     STREAM_TYPE,
     chunk_query,
+    db_meta_from_iter,
     log_diagram,
 )
 from .version import __version__
@@ -203,6 +204,14 @@ class BaseDumper(ABC):
 
         return self._isolation
 
+    @staticmethod
+    def _db_meta_from_iter(
+        dtype_data: Iterable[Any],
+        max_rows: int = 100,
+    ) -> tuple[DBMetadata, Generator[Any, Any, Any]]:
+
+        return db_meta_from_iter(dtype_data, max_rows)
+
     def mode_action(
         self,
         action_data: str | MethodType | None = None,
@@ -289,7 +298,8 @@ class BaseDumper(ABC):
                 source=source,
             )
             reader.close()
-            collect()
+
+        collect()
 
     @multiquery
     @abstractmethod
