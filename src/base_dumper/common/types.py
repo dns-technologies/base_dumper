@@ -135,6 +135,13 @@ class DumperType(Protocol):
         metadata: DBMetadata | object | None = None,
     ) -> ReaderType: ...
 
+    def _to_fileobj(
+        self,
+        query: str | None,
+        table_name: str | None,
+        metadata: DBMetadata | object | None = None,
+    ) -> BufferedReader | DBMetadata: ...
+
     def write_dump(
         self,
         fileobj: BufferedReader,
@@ -188,6 +195,7 @@ class DumperType(Protocol):
         bytes_data: Iterable[bytes],
         table_name: str,
         source: DBMetadata | object | None = None,
+        destination: DBMetadata | None = None,
     ) -> None: ...
 
     def from_fileobj(

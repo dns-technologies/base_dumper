@@ -42,6 +42,7 @@ from .common import (
     Timeout,
     STREAM_TYPE,
     chunk_query,
+    log_diagram,
 )
 from .version import __version__
 
@@ -107,7 +108,6 @@ class BaseDumper(ABC):
     isolation: IsolationLevel
     mode: DumperMode
     dump_format: DumpFormat
-    dbmeta: DBMetadata | None
     cursor: CursorType
     dbname: str
     is_readonly: bool
@@ -254,10 +254,16 @@ class BaseDumper(ABC):
             or (source_compressed and destination_compressed
                 and dumper_src.compression_method != self.compression_method)
         )
+
+        if self.mode is DumperMode.TEST:
+            source = dumper_src.metadata(query_src, table_src)
+            destination = self.metadata(table_name=table_dest)
+            return log_diagram(self.logger, self.mode, source, destination)
+
         source = dumper_src.metadata(query_src, table_src, True)
 
         if (
-            self.stream_type is dumper_src.stream_type
+            self.stream_type == dumper_src.stream_type
             and self.stream_type != "binary"
         ):
             self.from_fileobj(
@@ -295,13 +301,13 @@ class BaseDumper(ABC):
     ) -> ReaderType:
         """Internal method to_reader for generate kwargs to decorator."""
 
-    @multiquery
     @abstractmethod
     def _to_fileobj(
         self,
         query: str | None,
         table_name: str | None,
-    ) -> BufferedReader:
+        metadata: DBMetadata | object | None = None,
+    ) -> BufferedReader | DBMetadata:
         """Internal method to_fileobj for generate kwargs to decorator."""
 
     def read_dump(
@@ -367,13 +373,22 @@ class BaseDumper(ABC):
         table_name: str | None = None,
         compression_method: CompressionMethod | None = None,
         do_compress_action: bool = False,
-    ) -> BufferedReader:
+    ) -> BufferedReader | DBMetadata:
         """Get stream from Server as file object."""
+
+        @multiquery
+        def to_filobj_decorator(
+                dumper: DumperType,
+                query: str | None = None,
+                table_name: str | None = None,
+        ):
+            return dumper._to_fileobj(query=query, table_name=table_name)
 
         if not compression_method:
             compression_method = self.compression_method
 
-        fileobj = next(self._to_fileobj(
+        fileobj = next(to_filobj_decorator(
+            self,
             query=query,
             table_name=table_name,
         ))
@@ -446,6 +461,7 @@ class BaseDumper(ABC):
         bytes_data: Iterable[bytes],
         table_name: str,
         source: DBMetadata | object | None = None,
+        destination: DBMetadata | None = None,
     ) -> None:
         """Write from iterable bytes into Server object."""
 

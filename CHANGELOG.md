@@ -5,16 +5,21 @@
 * Developer release (not public to pip)
 * Add DBMetadata.close() method as patch
 * Add DBMetadata.tell() method as patch
+* Add DBMetadata.to_bytes() method as patch
+* Add DBMetadata.to_rows() method as patch
+* Add DBMetadata.to_pandas() method as patch
+* Add DBMetadata.to_polars() method as patch
 * Add depends csvpack==0.1.0.dev3
-* Remove AbstractCursor class
-* Remove ExampleReader class
 * Add CursorType, DumperType, ReaderType and WriterType types
-* Refactor BaseDumper
 * Add new methods
 * Add chunk_bytes() function
 * Add CSVStreamReader object
 * Add BaseDumper.to_reader() metadata optional parameter
 * Add source parameter into write methods
+* Remove AbstractCursor class
+* Remove ExampleReader class
+* Remove BaseDumper.dbmeta attribute
+* Refactor BaseDumper
 
 ## 0.2.0.dev0
 
