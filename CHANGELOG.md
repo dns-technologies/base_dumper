@@ -13,6 +13,7 @@
 * Add new methods
 * Add chunk_bytes() function
 * Add CSVStreamReader object
+* Add BaseDumper.to_reader() metadata optional parameter
 
 ## 0.2.0.dev0
 

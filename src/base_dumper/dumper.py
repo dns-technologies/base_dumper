@@ -291,6 +291,7 @@ class BaseDumper(ABC):
         self,
         query: str | None,
         table_name: str | None,
+        metadata: DBMetadata | bytes | None,
     ) -> ReaderType:
         """Internal method to_reader for generate kwargs to decorator."""
 
@@ -350,12 +351,14 @@ class BaseDumper(ABC):
         self,
         query: str | None = None,
         table_name: str | None = None,
+        metadata: DBMetadata | bytes | None = None,
     ) -> ReaderType:
         """Get stream from Server as stream object."""
 
         return next(self._to_reader(
             query=query,
             table_name=table_name,
+            metadata=metadata,
         ))
 
     def to_fileobj(
