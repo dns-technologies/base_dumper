@@ -254,6 +254,7 @@ class BaseDumper(ABC):
             or (source_compressed and destination_compressed
                 and dumper_src.compression_method != self.compression_method)
         )
+        source = dumper_src.metadata(query_src, table_src, True)
 
         if (
             self.stream_type is dumper_src.stream_type
@@ -267,13 +268,9 @@ class BaseDumper(ABC):
                 ),
                 table_name=table_dest,
                 do_compress_action=do_compress_write,
+                source=source,
             )
         else:
-            source = dumper_src.metadata(
-                    query=query_src,
-                    table_name=table_src,
-                    reader_meta=True,
-            )
             reader = dumper_src.to_reader(
                     query=query_src,
                     table_name=table_src,
@@ -391,7 +388,7 @@ class BaseDumper(ABC):
         self,
         dtype_data: Iterable[Any],
         table_name: str,
-        source: DBMetadata | None = None,
+        source: DBMetadata | object | None = None,
     ) -> None:
         """Write from python list into Server object."""
 
@@ -448,6 +445,7 @@ class BaseDumper(ABC):
         self,
         bytes_data: Iterable[bytes],
         table_name: str,
+        source: DBMetadata | object | None = None,
     ) -> None:
         """Write from iterable bytes into Server object."""
 
@@ -457,6 +455,7 @@ class BaseDumper(ABC):
         table_name: str,
         compression_method: CompressionMethod | None = None,
         do_compress_action: bool = False,
+        source: DBMetadata | object | None = None,
     ) -> None:
         """Write from file object into Server object."""
 
@@ -472,7 +471,7 @@ class BaseDumper(ABC):
                 self.compression_level,
             )
 
-        self.from_bytes(bytes_data, table_name)
+        self.from_bytes(bytes_data, table_name, source)
 
     @abstractmethod
     def refresh(self) -> None:

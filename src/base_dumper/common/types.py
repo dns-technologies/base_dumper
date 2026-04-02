@@ -168,7 +168,7 @@ class DumperType(Protocol):
         self,
         dtype_data: Iterable[Any],
         table_name: str,
-        source: DBMetadata | None = None,
+        source: DBMetadata | object | None = None,
     ) -> None: ...
 
     def from_pandas(
@@ -187,6 +187,7 @@ class DumperType(Protocol):
         self,
         bytes_data: Iterable[bytes],
         table_name: str,
+        source: DBMetadata | object | None = None,
     ) -> None: ...
 
     def from_fileobj(
@@ -195,4 +196,5 @@ class DumperType(Protocol):
         table_name: str,
         compression_method: CompressionMethod | None = None,
         do_compress_action: bool = False,
+        source: DBMetadata | object | None = None,
     ) -> None: ...
