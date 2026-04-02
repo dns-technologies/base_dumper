@@ -26,6 +26,7 @@ from .query_parts import (
 )
 from .types import (
     CursorType,
+    DumperType,
     ReaderType,
     WriterType,
 )
@@ -46,6 +47,7 @@ __all__ = (
     "DebugInfo",
     "DumperLogger",
     "DumperMode",
+    "DumperType",
     "DumpFormat",
     "IsolationLevel",
     "ReaderType",

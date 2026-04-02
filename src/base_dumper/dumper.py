@@ -14,10 +14,7 @@ from io import (
 )
 from logging import Logger
 from types import MethodType
-from typing import (
-    Any,
-    Optional,
-)
+from typing import Any
 
 from csvpack.common.sizes import CHUNK_SIZE
 from light_compressor import (
@@ -38,6 +35,7 @@ from .common import (
     DBMetadata,
     DumperLogger,
     DumperMode,
+    DumperType,
     DumpFormat,
     ReaderType,
     IsolationLevel,
@@ -243,7 +241,7 @@ class BaseDumper(ABC):
         table_dest: str,
         table_src: str | None,
         query_src: str | None,
-        dumper_src: Optional["BaseDumper"],
+        dumper_src: DumperType | None,
     ) -> None:
         """Internal method write_between for generate kwargs to decorator."""
 
@@ -332,7 +330,7 @@ class BaseDumper(ABC):
         table_dest: str,
         table_src: str | None = None,
         query_src: str | None = None,
-        dumper_src: Optional["BaseDumper"] = None,
+        dumper_src: DumperType | None = None,
     ) -> None:
         """Write stream between Servers."""
 

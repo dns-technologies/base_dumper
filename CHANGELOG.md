@@ -8,7 +8,7 @@
 * Add depends csvpack==0.1.0.dev3
 * Remove AbstractCursor class
 * Remove ExampleReader class
-* Add CursorType, ReaderType and WriterType types
+* Add CursorType, DumperType, ReaderType and WriterType types
 * Refactor BaseDumper
 * Add new methods
 * Add chunk_bytes() function
