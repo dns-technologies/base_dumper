@@ -222,7 +222,8 @@ class BaseDumper(ABC):
         self,
         query: str | None = None,
         table_name: str | None = None,
-    ) -> DBMetadata:
+        reader_meta: bool = False,
+    ) -> DBMetadata | object:
         """Read metadata from Server."""
 
     @multiquery
@@ -271,10 +272,12 @@ class BaseDumper(ABC):
             source = dumper_src.metadata(
                     query=query_src,
                     table_name=table_src,
+                    reader_meta=True,
             )
             reader = dumper_src.to_reader(
                     query=query_src,
                     table_name=table_src,
+                    metadata=source,
             )
             dtype_data = reader.to_rows()
             self.from_rows(
@@ -291,7 +294,7 @@ class BaseDumper(ABC):
         self,
         query: str | None,
         table_name: str | None,
-        metadata: DBMetadata | bytes | None,
+        metadata: DBMetadata | object | None = None,
     ) -> ReaderType:
         """Internal method to_reader for generate kwargs to decorator."""
 
@@ -351,7 +354,7 @@ class BaseDumper(ABC):
         self,
         query: str | None = None,
         table_name: str | None = None,
-        metadata: DBMetadata | bytes | None = None,
+        metadata: DBMetadata | object | None = None,
     ) -> ReaderType:
         """Get stream from Server as stream object."""
 
