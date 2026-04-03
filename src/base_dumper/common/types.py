@@ -80,7 +80,6 @@ class DumperType(Protocol):
     timeout: int
     isolation: IsolationLevel
     mode: DumperMode
-    dump_format: DumpFormat
     dbmeta: DBMetadata | None
     cursor: CursorType
     dbname: str
@@ -90,6 +89,8 @@ class DumperType(Protocol):
     with_compression: bool = False
     is_between: bool = False
 
+    @property
+    def dump_format(self) -> DumpFormat: ...
     @property
     def stream_type(self) -> str: ...
     @property

@@ -141,8 +141,8 @@ class BaseDumper(ABC):
         self.compression_level = compression_level
         self.logger = logger
         self.mode = mode
-        self.dump_format = dump_format
         self.s3_file = s3_file
+        self._dump_format = dump_format
         self._timeout = timeout
         self._isolation = isolation
 
@@ -190,6 +190,19 @@ class BaseDumper(ABC):
             return STREAM_TYPE.get(self.dbname, self.dump_format.name.lower())
 
         return self.dump_format.name.lower()
+
+    @property
+    def dump_format(self) -> DumpFormat:
+        """Property method for get dump_format value."""
+
+        return self._dump_format
+
+    @dump_format.setter
+    def dump_format(self, dump_format_value: DumpFormat) -> DumpFormat:
+        """Property method for set dump_format value."""
+
+        self._dump_format = dump_format_value
+        return self._dump_format
 
     @property
     def timeout(self) -> int:
@@ -263,13 +276,11 @@ class BaseDumper(ABC):
             or (source_compressed and destination_compressed
                 and dumper_src.compression_method != self.compression_method)
         )
+        source = dumper_src.metadata(query_src, table_src)
 
         if self.mode is DumperMode.TEST:
-            source = dumper_src.metadata(query_src, table_src)
             destination = self.metadata(table_name=table_dest)
             return log_diagram(self.logger, self.mode, source, destination)
-
-        source = dumper_src.metadata(query_src, table_src, True)
 
         if (
             self.stream_type == dumper_src.stream_type

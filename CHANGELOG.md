@@ -1,13 +1,21 @@
 # Version History
 
+## 0.2.0.dev3
+
+* Developer release (not public to pip)
+* Change BaseDumper.dumper_mode attribute to method
+* Fix BaseDumper._write_between() method
+* Update DumperType
+
 ## 0.2.0.dev2
 
 * Developer release (not public to pip)
 * Add db_meta_from_iter() function
 * Add BaseDumper._db_meta_from_iter() static method
-* Revision DumperType
 * Add BaseDumper._db_meta_from_iter() static method
 * Refactor BaseDumper._write_between() method
+* Change dump_format atribute to methdod
+* Revision DumperType
 * Update pytests
 * Update README.md
 
