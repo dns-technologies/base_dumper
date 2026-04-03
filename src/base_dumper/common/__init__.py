@@ -7,12 +7,6 @@ from .associate import (
 )
 from .connector import DBConnector
 from .dump_format import DumpFormat
-from .diagram import (
-    DBMetadata,
-    log_diagram,
-    table_diagram,
-    transfer_diagram,
-)
 from .errors import (
     BaseDumperError,
     BaseDumperTypeError,
@@ -28,15 +22,21 @@ from .query_parts import (
     get_query_kind,
     query_formatter,
 )
+from .renders import (
+    DBMetadata,
+    log_table,
+    single_table,
+    transfer_table,
+)
+from .stream import (
+    CSVStreamReader,
+    STREAM_TYPE,
+)
 from .types import (
     CursorType,
     DumperType,
     ReaderType,
     WriterType,
-)
-from .stream import (
-    CSVStreamReader,
-    STREAM_TYPE,
 )
 
 
@@ -62,9 +62,9 @@ __all__ = (
     "db_meta_from_iter",
     "get_query_kind",
     "query_formatter",
-    "log_diagram",
+    "log_table",
     "random_name",
     "repair_dtype_data",
-    "table_diagram",
-    "transfer_diagram",
+    "single_table",
+    "transfer_table",
 )

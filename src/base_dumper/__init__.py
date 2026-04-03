@@ -39,10 +39,10 @@ from .common import (
     chunk_query,
     get_query_kind,
     query_formatter,
-    log_diagram,
+    log_table,
     random_name,
-    table_diagram,
-    transfer_diagram,
+    single_table,
+    transfer_table,
 )
 from .dumper import (
     BaseDumper,
@@ -90,10 +90,10 @@ __all__ = (
     "chunk_query",
     "get_query_kind",
     "query_formatter",
-    "log_diagram",
+    "log_table",
     "multiquery",
     "random_name",
-    "table_diagram",
-    "transfer_diagram",
+    "single_table",
+    "transfer_table",
 )
 __author__ = "0xMihalich"

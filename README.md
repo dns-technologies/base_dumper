@@ -144,9 +144,9 @@ The package provides reader protocols that concrete implementations must follow:
 | `chunk_query(sql)` | Split multi-query string into individual statements |
 | `get_query_kind(sql)` | Detect SQL query type (SELECT, INSERT, UPDATE, etc.) |
 | `query_formatter(sql)` | Reformat SQL query |
-| `transfer_diagram(source, destination)` | Generate visual representation of data transfer |
-| `table_diagram(metadata)` | Generate visual representation of table schema |
-| `log_diagram(logger, mode, source, destination)` | Log diagram to logger |
+| `transfer_table(source, destination)` | Generate visual representation of data transfer |
+| `single_table(metadata)` | Generate visual representation of table schema |
+| `log_table(logger, mode, source, destination)` | Log diagram to logger |
 | `random_name()` | Generate random name for temporary objects |
 | `DBConnector` | Database connection parameters container |
 | `DBMetadata` | Database metadata container (name, version, columns) |

@@ -6,9 +6,9 @@ from base_dumper import (
     DumperMode,
     chunk_query,
     random_name,
-    transfer_diagram,
-    table_diagram,
-    log_diagram,
+    transfer_table,
+    single_table,
+    log_table,
 )
 
 
@@ -124,9 +124,9 @@ class TestRandomName:
 
 
 class TestTransferDiagram:
-    """Тесты для transfer_diagram функции."""
+    """Тесты для transfer_table функции."""
 
-    def test_transfer_diagram_with_columns(self):
+    def test_transfer_table_with_columns(self):
         """Test diagram with columns in both tables."""
 
         source_columns = OrderedDict(
@@ -149,7 +149,7 @@ class TestTransferDiagram:
         dest = DBMetadata(
             name="clickhouse", version="24", columns=dest_columns
         )
-        diagram = transfer_diagram(source, dest)
+        diagram = transfer_table(source, dest)
         assert isinstance(diagram, str)  # noqa: S101
         assert "Transfer data diagram:" in diagram  # noqa: S101
         assert "Source [postgres 14]" in diagram  # noqa: S101
@@ -160,12 +160,12 @@ class TestTransferDiagram:
         assert "int4" in diagram  # noqa: S101
         assert "String" in diagram  # noqa: S101
 
-    def test_transfer_diagram_empty_columns(self):
+    def test_transfer_table_empty_columns(self):
         """Test diagram with empty columns."""
 
         source = DBMetadata(name="source", version="1", columns=OrderedDict())
         dest = DBMetadata(name="dest", version="1", columns=OrderedDict())
-        diagram = transfer_diagram(source, dest)
+        diagram = transfer_table(source, dest)
         assert isinstance(diagram, str)  # noqa: S101
         assert "Transfer data diagram:" in diagram  # noqa: S101
         assert "Source [source 1]" in diagram  # noqa: S101
@@ -173,7 +173,7 @@ class TestTransferDiagram:
         assert "Column Name" in diagram  # noqa: S101
         assert "Data Type" in diagram  # noqa: S101
 
-    def test_transfer_diagram_single_column(self):
+    def test_transfer_table_single_column(self):
         """Test diagram with single column."""
         source_columns = OrderedDict([("id", "int4")])
         dest_columns = OrderedDict([("id", "Int64")])
@@ -181,13 +181,13 @@ class TestTransferDiagram:
         source = DBMetadata(name="source", version="1", columns=source_columns)
         dest = DBMetadata(name="dest", version="1", columns=dest_columns)
 
-        diagram = transfer_diagram(source, dest)
+        diagram = transfer_table(source, dest)
 
         assert "id" in diagram  # noqa: S101
         assert "int4" in diagram  # noqa: S101
         assert "Int64" in diagram  # noqa: S101
 
-    def test_transfer_diagram_long_names(self):
+    def test_transfer_table_long_names(self):
         """Test diagram with long column names."""
 
         source_columns = OrderedDict(
@@ -204,24 +204,24 @@ class TestTransferDiagram:
         )
         source = DBMetadata(name="source", version="1", columns=source_columns)
         dest = DBMetadata(name="dest", version="1", columns=dest_columns)
-        diagram = transfer_diagram(source, dest)
+        diagram = transfer_table(source, dest)
         assert "very_long_column_name_that_exceeds_usual_width" in diagram  # noqa: S101
         assert "another_long_column_name" in diagram  # noqa: S101
 
-    def test_transfer_diagram_arrow_present(self):
+    def test_transfer_table_arrow_present(self):
         """Test that diagram contains arrow."""
 
         source = DBMetadata(name="a", version="1", columns=OrderedDict())
         dest = DBMetadata(name="b", version="1", columns=OrderedDict())
-        diagram = transfer_diagram(source, dest)
+        diagram = transfer_table(source, dest)
         # Проверяем наличие символов стрелки (╲ и ╱)
         assert "╲" in diagram or "╱" in diagram  # noqa: S101
 
 
 class TestTableDiagram:
-    """Тесты для table_diagram функции."""
+    """Тесты для single_table функции."""
 
-    def test_table_diagram_with_columns(self):
+    def test_single_table_with_columns(self):
 
         """Test diagram for single table with columns."""
         columns = OrderedDict(
@@ -232,7 +232,7 @@ class TestTableDiagram:
             ]
         )
         metadata = DBMetadata(name="users", version="1", columns=columns)
-        diagram = table_diagram(metadata)
+        diagram = single_table(metadata)
         assert isinstance(diagram, str)  # noqa: S101
         assert "Result table diagram:" in diagram  # noqa: S101
         assert "Summary [users 1]" in diagram  # noqa: S101
@@ -243,38 +243,38 @@ class TestTableDiagram:
         assert "text" in diagram  # noqa: S101
         assert "int2" in diagram  # noqa: S101
 
-    def test_table_diagram_empty_columns(self):
+    def test_single_table_empty_columns(self):
         """Test diagram with empty columns."""
 
         metadata = DBMetadata(name="empty", version="1", columns=OrderedDict())
-        diagram = table_diagram(metadata)
+        diagram = single_table(metadata)
         assert isinstance(diagram, str)  # noqa: S101
         assert "Result table diagram:" in diagram  # noqa: S101
         assert "Summary [empty 1]" in diagram  # noqa: S101
         assert "Column Name" in diagram  # noqa: S101
         assert "Data Type" in diagram  # noqa: S101
 
-    def test_table_diagram_single_column(self):
+    def test_single_table_single_column(self):
         """Test diagram with single column."""
 
         columns = OrderedDict([("id", "int4")])
         metadata = DBMetadata(name="single", version="1", columns=columns)
-        diagram = table_diagram(metadata)
+        diagram = single_table(metadata)
         assert "id" in diagram  # noqa: S101
         assert "int4" in diagram  # noqa: S101
 
 
 class TestLogDiagram:
-    """Тесты для log_diagram функции."""
+    """Тесты для log_table функции."""
 
-    def test_log_transfer_diagram(self, mock_logger):
+    def test_log_transfer_table(self, mock_logger):
         """Test logging transfer diagram."""
 
         source_columns = OrderedDict([("id", "int4")])
         dest_columns = OrderedDict([("id", "Int64")])
         source = DBMetadata(name="source", version="1", columns=source_columns)
         dest = DBMetadata(name="dest", version="1", columns=dest_columns)
-        log_diagram(mock_logger, DumperMode.PROD, source, dest)
+        log_table(mock_logger, DumperMode.PROD, source, dest)
         # Проверяем, что logger.info был вызван
         mock_logger.info.assert_called_once()
         call_args = mock_logger.info.call_args[0][0]
@@ -282,23 +282,23 @@ class TestLogDiagram:
         assert "Source [source 1]" in call_args  # noqa: S101
         assert "Destination [dest 1]" in call_args  # noqa: S101
 
-    def test_log_table_diagram(self, mock_logger):
+    def test_log_single_table(self, mock_logger):
         """Test logging single table diagram."""
 
         columns = OrderedDict([("id", "int4")])
         metadata = DBMetadata(name="users", version="1", columns=columns)
-        log_diagram(mock_logger, DumperMode.DEBUG, metadata)
+        log_table(mock_logger, DumperMode.DEBUG, metadata)
         mock_logger.info.assert_called_once()
         call_args = mock_logger.info.call_args[0][0]
         assert "Result table diagram:" in call_args  # noqa: S101
         assert "Summary [users 1]" in call_args  # noqa: S101
 
-    def test_log_diagram_test_mode_warning(self, mock_logger):
+    def test_log_table_test_mode_warning(self, mock_logger):
         """Test warning in TEST mode."""
 
         columns = OrderedDict([("id", "int4")])
         metadata = DBMetadata(name="users", version="1", columns=columns)
-        log_diagram(mock_logger, DumperMode.TEST, metadata)
+        log_table(mock_logger, DumperMode.TEST, metadata)
         mock_logger.info.assert_called_once()
         mock_logger.warning.assert_called_once()
         warning_msg = mock_logger.warning.call_args[0][0]

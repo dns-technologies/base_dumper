@@ -23,10 +23,10 @@ from polars import (
 )
 
 from .connector import DBConnector
-from .diagram import DBMetadata
 from .dump_format import DumpFormat
 from .isolations import IsolationLevel
 from .mode_level import DumperMode
+from .renders import DBMetadata
 
 
 @runtime_checkable

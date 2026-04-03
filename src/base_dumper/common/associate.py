@@ -6,7 +6,7 @@ from collections.abc import (
 from platform import python_version
 from typing import Any
 
-from .diagram import DBMetadata
+from .renders import DBMetadata
 
 
 def repair_dtype_data(

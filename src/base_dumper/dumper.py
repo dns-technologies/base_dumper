@@ -43,7 +43,7 @@ from .common import (
     STREAM_TYPE,
     chunk_query,
     db_meta_from_iter,
-    log_diagram,
+    log_table,
 )
 from .version import __version__
 
@@ -280,7 +280,7 @@ class BaseDumper(ABC):
 
         if self.mode is DumperMode.TEST:
             destination = self.metadata(table_name=table_dest)
-            return log_diagram(self.logger, self.mode, source, destination)
+            return log_table(self.logger, self.mode, source, destination)
 
         if (
             self.stream_type == dumper_src.stream_type

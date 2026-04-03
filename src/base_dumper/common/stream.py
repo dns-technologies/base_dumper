@@ -15,7 +15,7 @@ from light_compressor import (
 )
 from polars import Object
 
-from .diagram import DBMetadata
+from .renders import DBMetadata
 
 
 STREAM_TYPE = {

@@ -6,6 +6,11 @@
 * Change BaseDumper.dumper_mode attribute to method
 * Fix BaseDumper._write_between() method
 * Update DumperType
+* Rename diagram.py	renders.py
+* Rename transfer_diagram() to transfer_table()
+* Rename table_diagram() to single_table()
+* Rename log_diagram() to log_table()
+* Update README.md
 
 ## 0.2.0.dev2
 
@@ -65,10 +70,10 @@
 
 * Developer release (not public to pip)
 * Improve DebugInfo object
-* Improve transfer_diagram() function
+* Improve transfer_table() function
 * Improve multiquery decorator
-* Add log_diagram() function
-* Add table_diagram() function
+* Add log_table() function
+* Add single_table() function
 * Add DumpFormat enum
 * Add BaseDumper.dump_format parameter
 * Remove BaseDumper.s3fs parameter

@@ -72,7 +72,7 @@ def __format_table(
     return lines
 
 
-def transfer_diagram(source: DBMetadata, destination: DBMetadata) -> str:
+def transfer_table(source: DBMetadata, destination: DBMetadata) -> str:
     """Make transfer diagram with two tables and arrow."""
 
     src_lines = __format_table(source, "Source")
@@ -102,14 +102,14 @@ def transfer_diagram(source: DBMetadata, destination: DBMetadata) -> str:
     )
 
 
-def table_diagram(metadata: DBMetadata) -> str:
+def single_table(metadata: DBMetadata) -> str:
     """Make diagram for sibgle table."""
 
     diagram = __format_table(metadata, "Summary")
     return "Result table diagram:\n" + "\n".join(diagram)
 
 
-def log_diagram(
+def log_table(
     logger: Logger,
     mode: DumperMode,
     source: DBMetadata,
@@ -118,9 +118,9 @@ def log_diagram(
     """Generate diagram log message."""
 
     if destination:
-        diagram_message = transfer_diagram(source, destination)
+        diagram_message = transfer_table(source, destination)
     else:
-        diagram_message = table_diagram(source)
+        diagram_message = single_table(source)
 
     logger.info(diagram_message)
 
