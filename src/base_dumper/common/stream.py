@@ -38,8 +38,8 @@ class CSVStreamReader(CSVPackReader):
 
     def __init__(
         self,
-        metadata: DBMetadata,
         fileobj: BufferedReader,
+        metadata: DBMetadata,
         compression_method: CompressionMethod = CompressionMethod.NONE,
         delimiter: str = ",",
         quote_char: str = '"',
