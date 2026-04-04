@@ -4,6 +4,8 @@
 
 * Developer release (not public to pip)
 * Update depends csvpack==0.1.0.dev4
+* Improve get_query_kind() function
+* Update pytests
 * Update README.md
 
 ## 0.2.0.dev3

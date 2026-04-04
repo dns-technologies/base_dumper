@@ -33,16 +33,16 @@ class TestGetQueryKind:
             ("DROP INDEX IF EXISTS idx_users", "Drop"),
             # ALTER запросы
             ("ALTER TABLE users ADD COLUMN age int", "Alter"),
-            # ANALYZE запросы (должны возвращать Unknown)
-            ("ANALYZE users", "Unknown"),
-            ("ANALYZE default.table", "Unknown"),
-            ("analyze users", "Unknown"),
+            # ANALYZE запросы
+            ("ANALYZE users", "Analyze"),
+            ("ANALYZE default.table", "Analyze"),
+            ("analyze users", "Analyze"),
             # Другие команды
-            ("VACUUM users", "Unknown"),
-            ("REINDEX TABLE users", "Unknown"),
-            ("GRANT SELECT ON users TO user", "Unknown"),
+            ("VACUUM users", "Vacuum"),
+            ("REINDEX TABLE users", "Reindex"),
+            ("GRANT SELECT ON users TO user", "Grant"),
             ("COMMIT", "Commit"),
-            ("BEGIN", "Unknown"),
+            ("BEGIN", "Begin"),
             # Пустой запрос
             ("", "Unknown"),
             ("   ", "Unknown"),
@@ -64,7 +64,7 @@ class TestGetQueryKind:
         """Test with invalid SQL."""
 
         result = get_query_kind("INVALID SQL !!!")
-        assert result == "Unknown"  # noqa: S101
+        assert result == "Invalid"  # noqa: S101
 
     def test_get_query_kind_with_multiple_statements(self):
         """Test with multiple statements."""

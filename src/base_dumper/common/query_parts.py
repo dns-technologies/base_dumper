@@ -10,17 +10,27 @@ from sqlparse import (
 
 
 EXECUTE_PATTERN = compile(r"^(with|select|show|grant|describe)\s", IGNORECASE)
+FIRST_WORD_PATTERN = compile(r"^\s*([a-zA-Z]+)")
 QUERY_PATTERN = compile(r";(?=(?:[^']*'[^']*')*[^']*$)")
 STRIP_CHARS = "; \t\n\r"
+UNKNOWN = "Unknown"
 
 
 def get_query_kind(query: str) -> str:
     """Get kind of query."""
 
     try:
-        return parse(query)[0].get_type().capitalize()
+        query_kind = parse(query)[0].get_type().capitalize()
+
+        if query_kind == UNKNOWN:
+            _match = FIRST_WORD_PATTERN.match(query)
+
+            if _match:
+                return _match.group(1).capitalize()
+
+        return query_kind
     except IndexError:
-        return "Unknown"
+        return UNKNOWN
 
 
 def query_formatter(queries: str) -> str:
