@@ -4,6 +4,8 @@
 
 * Developer release (not public to pip)
 * Update depends csvpack==0.1.0.dev4
+* Swap CSVStreamReader metadata and fileobj initialization parameters
+* Update README.md
 
 ## 0.2.0.dev3
 
@@ -38,7 +40,7 @@
 * Add DBMetadata.to_rows() method as patch
 * Add DBMetadata.to_pandas() method as patch
 * Add DBMetadata.to_polars() method as patch
-* Add depends csvpack==0.1.0.dev4
+* Add depends csvpack==0.1.0.dev3
 * Add CursorType, DumperType, ReaderType and WriterType types
 * Add new methods
 * Add chunk_bytes() function

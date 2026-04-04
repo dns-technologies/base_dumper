@@ -359,7 +359,7 @@ metadata = DBMetadata(
 
 # Read CSV file with automatic type conversion
 with open("data.csv", "rb") as f:
-    reader = CSVStreamReader(f, metadata)
+    reader = CSVStreamReader(metadata, f)
     df = reader.to_pandas()
 ```
 
