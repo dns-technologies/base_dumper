@@ -366,7 +366,7 @@ with open("data.csv", "rb") as f:
 ## Requirements
 
 - Python>=3.10
-- csvpack==0.1.0.dev3
+- csvpack==0.1.0.dev4
 - light-compressor==0.1.1.dev1
 - sqlparse==0.5.4
 - pandas>=2.1.0
