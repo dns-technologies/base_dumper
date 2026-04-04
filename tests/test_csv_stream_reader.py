@@ -60,12 +60,14 @@ class TestCSVStreamReader:
     """Tests for CSVStreamReader."""
 
     def test_reader_initialization(
-        self, sample_db_metadata, sample_csv_buffer
+        self,
+        sample_db_metadata,
+        sample_csv_buffer,
     ):
         """Test CSVStreamReader initialization."""
         reader = CSVStreamReader(
-            fileobj=sample_csv_buffer,
             metadata=sample_db_metadata,
+            fileobj=sample_csv_buffer,
             compression_method=CompressionMethod.NONE,
         )
 
@@ -89,8 +91,8 @@ class TestCSVStreamReader:
         """Test reading rows from CSVStreamReader."""
 
         reader = CSVStreamReader(
-            fileobj=sample_csv_buffer,
             metadata=sample_db_metadata,
+            fileobj=sample_csv_buffer,
             compression_method=CompressionMethod.NONE,
         )
         rows = list(reader.to_rows())
@@ -106,8 +108,8 @@ class TestCSVStreamReader:
         """Test converting to pandas DataFrame."""
 
         reader = CSVStreamReader(
-            fileobj=sample_csv_buffer,
             metadata=sample_db_metadata,
+            fileobj=sample_csv_buffer,
             compression_method=CompressionMethod.NONE,
         )
         df = reader.to_pandas()
@@ -130,8 +132,8 @@ class TestCSVStreamReader:
         """Test converting to polars DataFrame."""
 
         reader = CSVStreamReader(
-            fileobj=sample_csv_buffer,
             metadata=sample_db_metadata,
+            fileobj=sample_csv_buffer,
             compression_method=CompressionMethod.NONE,
         )
         df = reader.to_polars()
@@ -156,8 +158,8 @@ class TestCSVStreamReader:
         """Test reading raw bytes from CSVStreamReader."""
 
         reader = CSVStreamReader(
-            fileobj=sample_csv_buffer,
             metadata=sample_db_metadata,
+            fileobj=sample_csv_buffer,
             compression_method=CompressionMethod.NONE,
         )
 
@@ -171,8 +173,8 @@ class TestCSVStreamReader:
         """Test CSVStreamReader with no compression (default)."""
 
         reader = CSVStreamReader(
-            fileobj=sample_csv_buffer,
             metadata=sample_db_metadata,
+            fileobj=sample_csv_buffer,
         )
 
         rows = list(reader.to_rows())
@@ -190,8 +192,8 @@ class TestCSVStreamReaderEdgeCases:
         empty_buffer = io.BytesIO(b"")
         empty_buffer.seek(0)
         reader = CSVStreamReader(
-            fileobj=empty_buffer,
             metadata=sample_db_metadata,
+            fileobj=empty_buffer,
             compression_method=CompressionMethod.NONE,
         )
         rows = list(reader.to_rows())
@@ -202,8 +204,8 @@ class TestCSVStreamReaderEdgeCases:
         """Test string representation of CSVStreamReader."""
 
         reader = CSVStreamReader(
-            fileobj=sample_csv_buffer,
             metadata=sample_db_metadata,
+            fileobj=sample_csv_buffer,
             compression_method=CompressionMethod.NONE,
         )
         list(reader.to_rows())
@@ -234,8 +236,8 @@ class TestCSVStreamReaderWithGzip:
         """Test CSVStreamReader with gzip compression."""
 
         reader = CSVStreamReader(
-            fileobj=gzip_compressed_csv,
             metadata=sample_db_metadata,
+            fileobj=gzip_compressed_csv,
             compression_method=CompressionMethod.GZIP,
         )
         rows = list(reader.to_rows())

@@ -30,8 +30,8 @@ STREAM_TYPE = {
 class CSVStreamReader(CSVPackReader):
     """Class for manipulate uncompressed stream csv object."""
 
-    db_metadata: DBMetadata
     fileobj: BufferedReader
+    db_metadata: DBMetadata
     compression_method: CompressionMethod
     compression_stream: BufferedReader
     metadata: CSVPackMeta
@@ -48,8 +48,8 @@ class CSVStreamReader(CSVPackReader):
     ) -> None:
         """Class initialization."""
 
-        self.db_metadata = metadata
         self.fileobj = fileobj
+        self.db_metadata = metadata
         self.compression_method = compression_method
         self.compression_stream = define_reader(
             self.fileobj,
