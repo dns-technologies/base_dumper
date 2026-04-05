@@ -5,6 +5,7 @@
 * Developer release (not public to pip)
 * Update depends csvpack==0.1.0.dev4
 * Improve get_query_kind() function
+* Change compression_level attribute to property method
 * Update pytests
 * Update README.md
 

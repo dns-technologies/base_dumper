@@ -103,7 +103,6 @@ class BaseDumper(ABC):
 
     connector: DBConnector
     compression_method: CompressionMethod
-    compression_level: int
     logger: Logger
     timeout: int
     isolation: IsolationLevel
@@ -138,10 +137,11 @@ class BaseDumper(ABC):
 
         self.connector = connector
         self.compression_method = compression_method
-        self.compression_level = compression_level
+        self._compression_level = compression_level
         self.logger = logger
         self.mode = mode
         self.s3_file = s3_file
+        self._compression_level = compression_level
         self._dump_format = dump_format
         self._timeout = timeout
         self._isolation = isolation
@@ -190,6 +190,19 @@ class BaseDumper(ABC):
             return STREAM_TYPE.get(self.dbname, self.dump_format.name.lower())
 
         return self.dump_format.name.lower()
+
+    @property
+    def compression_level(self) -> int:
+        """Property method for get compression_level value."""
+
+        return self._compression_level
+
+    @compression_level.setter
+    def compression_level(self, compression_value: int) -> int:
+        """Property method for set compression_level value."""
+
+        self._compression_level = compression_value
+        return self._compression_level
 
     @property
     def dump_format(self) -> DumpFormat:
