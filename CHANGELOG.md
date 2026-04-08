@@ -1,5 +1,12 @@
 # Version History
 
+## 0.2.0.dev5
+
+* Developer release (not public to pip)
+* Update depends csvpack==0.1.0.dev5
+* Update depends light-compressor==0.1.1.dev2
+* Update README.md
+
 ## 0.2.0.dev4
 
 * Developer release (not public to pip)
@@ -88,7 +95,7 @@
 * Remove BaseDumper.s3fs parameter
 * Update README.md
 
-## 0.1.0.dev4
+## 0.1.0.dev5
 
 * Developer release (not public to pip)
 * Add DebugInfo object
@@ -101,10 +108,10 @@
 * Refactor self.logger initialization
 * Rename timeouts -> Timeout
 
-## 0.1.0.dev4
+## 0.1.0.dev5
 
 * Developer release (not public to pip)
-* Update depends light-compressor==0.1.0.dev4
+* Update depends light-compressor==0.1.0.dev5
 * Change compression_level to CompressionLevel.ZSTD_DEFAULT
 * Add BaseDumper.mode_action() for DumperMode.DEBUG/TEST actions
 
