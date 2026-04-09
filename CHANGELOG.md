@@ -6,6 +6,8 @@
 * Update depends csvpack==0.1.0.dev5
 * Update depends light-compressor==0.1.1.dev2
 * Update README.md
+* Improve ReaderType
+* Improve WriterType
 
 ## 0.2.0.dev4
 
