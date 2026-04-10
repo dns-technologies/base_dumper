@@ -1,5 +1,14 @@
 # Version History
 
+## 0.2.0.dev6
+
+* Developer release (not public to pip)
+* Update depends csvpack==0.1.0.dev6
+* Add PackReaderType type
+* Add PackMetaType type
+* Refactor CSVStreamReader
+* Update README.md
+
 ## 0.2.0.dev5
 
 * Developer release (not public to pip)

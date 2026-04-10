@@ -35,6 +35,8 @@ from .stream import (
 from .types import (
     CursorType,
     DumperType,
+    PackMetaType,
+    PackReaderType,
     ReaderType,
     WriterType,
 )
@@ -54,6 +56,8 @@ __all__ = (
     "DumperType",
     "DumpFormat",
     "IsolationLevel",
+    "PackMetaType",
+    "PackReaderType",
     "ReaderType",
     "Timeout",
     "WriterType",

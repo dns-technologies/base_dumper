@@ -15,12 +15,12 @@ from typing import (
     runtime_checkable,
 )
 
-from csvpack import CSVPackMeta
 from light_compressor import CompressionMethod
 from pandas import DataFrame as PdFrame
 from polars import (
     DataFrame as PlFrame,
     LazyFrame as LfFrame,
+    Object,
 )
 
 from .connector import DBConnector
@@ -39,11 +39,26 @@ class CursorType(Protocol):
 
 
 @runtime_checkable
+class PackMetaType(Protocol):
+    """Protocol for PackMeta object."""
+
+    @property
+    def pandas_astype(self) -> dict[str, str]: ...
+    @classmethod
+    def from_params(cls, **kwargs: Any) -> "PackMetaType": ...
+    @classmethod
+    def from_bytes(cls, metadata: bytes) -> "PackMetaType": ...
+    def to_bytes(self) -> bytes: ...
+    def __bytes__(self) -> bytes: ...
+    def __repr__(self) -> str: ...
+
+
+@runtime_checkable
 class ReaderType(Protocol):
     """Protocol for Reader object."""
 
     fileobj: BufferedReader
-    metadata: CSVPackMeta | bytes | dict[str, Any]
+    metadata: PackMetaType | bytes | dict[str, Any]
     columns: list[str]
     dtypes: list[str]
 
@@ -60,11 +75,22 @@ class ReaderType(Protocol):
     def close(self) -> None: ...
 
 
+class PackReaderType(ReaderType):
+    """Protocol for PackReader object."""
+
+    compression_method: CompressionMethod
+    compression_stream: BufferedReader
+    s3_file: bool
+    schema_overrides: dict[str, Object]
+    _reader_pos: int
+    _reader: ReaderType | None
+
+
 @runtime_checkable
 class WriterType(Protocol):
     """Protocol for Reader object."""
 
-    metadata: object
+    metadata: PackMetaType | bytes | dict[str, Any]
     columns: list[str]
     dtypes: list[str]
 

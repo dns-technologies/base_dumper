@@ -65,7 +65,7 @@ class CSVStreamReader(CSVPackReader):
             encoding=encoding,
             has_header=has_header,
         )
-        self.csv_reader = CSVReader(
+        self._reader = CSVReader(
             self.compression_stream,
             self.metadata.csv_metadata,
             self.metadata.delimiter,
@@ -95,7 +95,7 @@ class CSVStreamReader(CSVPackReader):
             "<CSV stream reader>",
             [
                 f"Total columns: {len(self.columns)}",
-                f"Readed rows: {self.csv_reader.num_rows}",
+                f"Readed rows: {self._reader.num_rows}",
                 f"Source: {self.db_metadata.name}",
                 f"Version: {self.db_metadata.version}",
             ],
