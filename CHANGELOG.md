@@ -6,6 +6,7 @@
 * Update depends csvpack==0.1.0.dev6
 * Add PackReaderType type
 * Add PackMetaType type
+* Add logger.info() messages for write operations
 * Refactor CSVStreamReader
 * Update README.md
 
