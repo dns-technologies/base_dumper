@@ -299,12 +299,13 @@ class BaseDumper(ABC):
             self.stream_type == dumper_src.stream_type
             and self.stream_type != "binary"
         ):
+            fileobj = dumper_src.to_fileobj(
+                query=query_src,
+                table_name=table_src,
+                do_compress_action=do_compress_read,
+            )
             self.from_fileobj(
-                fileobj=dumper_src.to_fileobj(
-                    query=query_src,
-                    table_name=table_src,
-                    do_compress_action=do_compress_read,
-                ),
+                fileobj=fileobj,
                 table_name=table_dest,
                 do_compress_action=do_compress_write,
                 source=source,
