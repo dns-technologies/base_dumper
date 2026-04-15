@@ -7,6 +7,7 @@
 * Add PackReaderType type
 * Add PackMetaType type
 * Add logger.info() messages for write operations
+* Change DumperLogger root directory to f"{root_dir()}/dbhose_logs"
 * Refactor CSVStreamReader
 * Refactor db_meta_from_iter()
 * Update README.md

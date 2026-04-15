@@ -46,7 +46,7 @@ class DumperLogger(Logger):
             "| %(funcName)s-%(filename)s-%(lineno)04d <%(message)s>"
         )
         self.setLevel(level)
-        self.log_path = f"{root_dir()}/dumper_logs"
+        self.log_path = f"{root_dir()}/dbhose_logs"
         makedirs(self.log_path, exist_ok=True)
 
         formatter = Formatter(
