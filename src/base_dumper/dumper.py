@@ -323,7 +323,7 @@ class BaseDumper(ABC):
             )
             result_bytes = reader.tell()
             reader.close()
-            self.logger.info(f"Writen {result_bytes} bytes.")
+            self.logger.info(f"Successfully sending {result_bytes} bytes.")
 
         collect()
 
@@ -380,6 +380,7 @@ class BaseDumper(ABC):
         if not dumper_src:
             dumper_src = self
 
+        self.logger.info("Start write between servers.")
         dumper_src.is_between = True
         next(self._write_between(
             table_dest=table_dest,
@@ -527,7 +528,7 @@ class BaseDumper(ABC):
         self.from_bytes(bytes_data, table_name, source)
         result_bytes = fileobj.tell()
         fileobj.close()
-        self.logger.info(f"Writen {result_bytes} bytes.")
+        self.logger.info(f"Successfully sending {result_bytes} bytes.")
 
     @abstractmethod
     def refresh(self) -> None:
