@@ -58,6 +58,6 @@ def db_meta_from_iter(
         columns = OrderedDict([("column_0", "NoneType")])
 
     return (
-        DBMetadata("Iterable Object", f"Python {python_version()}", columns),
+        DBMetadata("Iterable", f"Python {python_version()}", columns),
         repair_dtype_data(head_data, iterator),
     )

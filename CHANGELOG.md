@@ -8,6 +8,7 @@
 * Add PackMetaType type
 * Add logger.info() messages for write operations
 * Refactor CSVStreamReader
+* Refactor db_meta_from_iter()
 * Update README.md
 
 ## 0.2.0.dev5
