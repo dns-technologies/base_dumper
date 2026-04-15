@@ -21,7 +21,7 @@ class TestDbMetaFromIter:
             (2, "Bob", 30, False, 60000.0),
         ]
         dbmeta, generator = db_meta_from_iter(rows)
-        assert dbmeta.name == "Iterable Object"  # noqa: S101
+        assert dbmeta.name == "Iterable"  # noqa: S101
         assert "Python" in dbmeta.version  # noqa: S101
         assert len(dbmeta.columns) == 5  # noqa: S101
         assert dbmeta.columns["column_0"] == "int"  # noqa: S101

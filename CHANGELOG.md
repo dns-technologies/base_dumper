@@ -11,6 +11,7 @@
 * Refactor CSVStreamReader
 * Refactor db_meta_from_iter()
 * Update README.md
+* Update pytests
 
 ## 0.2.0.dev5
 
