@@ -321,7 +321,9 @@ class BaseDumper(ABC):
                 table_name=table_dest,
                 source=source,
             )
+            result_bytes = reader.tell()
             reader.close()
+            self.logger.info(f"Writen {result_bytes} bytes.")
 
         collect()
 
@@ -386,6 +388,7 @@ class BaseDumper(ABC):
             dumper_src=dumper_src,
         ))
         dumper_src.is_between = False
+        self.logger.info("Write between servers success.")
 
     def to_reader(
         self,
@@ -522,6 +525,9 @@ class BaseDumper(ABC):
             )
 
         self.from_bytes(bytes_data, table_name, source)
+        result_bytes = fileobj.tell()
+        fileobj.close()
+        self.logger.info(f"Writen {result_bytes} bytes.")
 
     @abstractmethod
     def refresh(self) -> None:
