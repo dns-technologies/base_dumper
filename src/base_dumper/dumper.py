@@ -289,16 +289,17 @@ class BaseDumper(ABC):
             or (source_compressed and destination_compressed
                 and dumper_src.compression_method != self.compression_method)
         )
-        source = dumper_src.metadata(query_src, table_src)
 
         if self.mode is DumperMode.TEST:
             destination = self.metadata(table_name=table_dest)
+            source = dumper_src.metadata(query_src, table_src)
             return log_table(self.logger, self.mode, source, destination)
 
         if (
             self.stream_type == dumper_src.stream_type
             and self.stream_type != "binary"
         ):
+            source = dumper_src.metadata(query_src, table_src)
             fileobj = dumper_src.to_fileobj(
                 query=query_src,
                 table_name=table_src,
@@ -311,10 +312,11 @@ class BaseDumper(ABC):
                 source=source,
             )
         else:
+            metadata = dumper_src.metadata(query_src, table_src, True)
             reader = dumper_src.to_reader(
                     query=query_src,
                     table_name=table_src,
-                    metadata=source,
+                    metadata=metadata,
             )
             dtype_data = reader.to_rows()
             self.from_rows(
