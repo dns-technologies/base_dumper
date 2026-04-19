@@ -40,6 +40,9 @@ class ConcreteDumper(BaseDumper):
             columns=OrderedDict(),
         )
 
+    def _dbmeta(self, metadata):  # noqa: ARG002
+        return self.metadata()
+
     def _read_dump(self, fileobj, table_name=None, query=None, **kwargs):
         self._read_dump_calls.append({
             "fileobj": fileobj,
