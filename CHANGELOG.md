@@ -13,6 +13,8 @@
 * Rename query_parts.sql -> queries.sql
 * Improve ReaderType.metadata typing
 * Improve WriterType.metadata typing
+* Improve BaseDumper._write_between() method
+* Improve BaseDumper.to_fileobj() method
 * Update pytests
 * Update depends csvpack==0.2.0.dev0
 * Update depends light-compressor==0.1.1.dev3

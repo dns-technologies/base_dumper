@@ -313,6 +313,7 @@ class BaseDumper(ABC):
                 query=query_src,
                 table_name=table_src,
                 do_compress_action=do_compress_read,
+                metadata=source,
             )
             self.from_fileobj(
                 fileobj=fileobj,
@@ -422,6 +423,7 @@ class BaseDumper(ABC):
         table_name: str | None = None,
         compression_method: CompressionMethod | None = None,
         do_compress_action: bool = False,
+        metadata: DBMetadata | object | None = None,
     ) -> BufferedReader | DBMetadata:
         """Get stream from Server as file object."""
 
@@ -430,8 +432,13 @@ class BaseDumper(ABC):
                 dumper: DumperType,
                 query: str | None = None,
                 table_name: str | None = None,
+                metadata: DBMetadata | object | None = None,
         ):
-            return dumper._to_fileobj(query=query, table_name=table_name)
+            return dumper._to_fileobj(
+                query=query,
+                table_name=table_name,
+                metadata=metadata,
+            )
 
         if not compression_method:
             compression_method = self.compression_method
@@ -440,6 +447,7 @@ class BaseDumper(ABC):
             self,
             query=query,
             table_name=table_name,
+            metadata=metadata,
         ))
 
         if do_compress_action:
