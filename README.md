@@ -371,6 +371,7 @@ with open("data.csv", "rb") as f:
 - csvpack==0.2.0.dev0
 - light-compressor==0.1.1.dev3
 - sqlglot>=30.6.0
+- sqlglotс>=30.6.0
 - pandas>=2.1.0
 - polars>=0.20.31
 

@@ -5,6 +5,7 @@
 * Developer release (not public to pip)
 * Delete depends sqlparse
 * Add depends sqlglot>=30.6.0
+* Add depends sqlglotc>=30.6.0
 * Add use_remote_if_available parameter
 * Change IsolationLevel keys register
 * Refactor common directory
