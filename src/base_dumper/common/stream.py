@@ -6,14 +6,12 @@ from csvpack import (
     CSVPackMeta,
     CSVReader,
 )
-from csvpack.common.ptype import LIST
 from csvpack.common.repr import table_repr
 from csvpack.common.sizes import CHUNK_SIZE
 from light_compressor import (
     CompressionMethod,
     define_reader,
 )
-from polars import Object
 
 from .renders import DBMetadata
 
@@ -35,6 +33,7 @@ class CSVStreamReader(CSVPackReader):
     compression_method: CompressionMethod
     compression_stream: BufferedReader
     metadata: CSVPackMeta
+    _reader: CSVReader
 
     def __init__(
         self,
@@ -73,12 +72,6 @@ class CSVStreamReader(CSVPackReader):
             self.metadata.encoding,
             self.metadata.has_header,
         )
-        self.schema_overrides = {
-            column: Object
-            for columns in self.metadata.csv_metadata
-            for column, ptype in columns.items()
-            if LIST in ptype
-        }
 
     def to_bytes(self) -> Generator[bytes, None, None]:
         """Get raw stream data."""

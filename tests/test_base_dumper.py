@@ -132,7 +132,7 @@ def concrete_dumper(base_connector, mock_logger):
         compression_level=3,
         logger=mock_logger,
         timeout=30,
-        isolation=IsolationLevel.committed,
+        isolation=IsolationLevel.COMMITTED,
         mode=DumperMode.PROD,
         dump_format=DumpFormat.BINARY,
     )
@@ -186,7 +186,7 @@ class TestBaseDumperInitialization:
             compression_level=5,
             logger=mock_logger,
             timeout=60,
-            isolation=IsolationLevel.repeatable,
+            isolation=IsolationLevel.REPEATABLE,
             mode=DumperMode.DEBUG,
             dump_format=DumpFormat.CSV,
         )
@@ -195,7 +195,7 @@ class TestBaseDumperInitialization:
         assert dumper.compression_level == 5  # noqa: S101
         assert dumper.logger == mock_logger  # noqa: S101
         assert dumper.timeout == 60  # noqa: S101
-        assert dumper.isolation == IsolationLevel.repeatable  # noqa: S101
+        assert dumper.isolation == IsolationLevel.REPEATABLE  # noqa: S101
         assert dumper.mode == DumperMode.DEBUG  # noqa: S101
         assert dumper.dump_format == DumpFormat.CSV  # noqa: S101
 
@@ -205,7 +205,7 @@ class TestBaseDumperInitialization:
         assert dumper.compression_method == CompressionMethod.ZSTD  # noqa: S101
         assert dumper.compression_level == 3  # noqa: S101
         assert dumper.timeout == 3600  # noqa: S101
-        assert dumper.isolation == IsolationLevel.committed  # noqa: S101
+        assert dumper.isolation == IsolationLevel.COMMITTED  # noqa: S101
         assert dumper.mode == DumperMode.PROD  # noqa: S101
         assert dumper.dump_format == DumpFormat.BINARY  # noqa: S101
 

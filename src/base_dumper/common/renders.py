@@ -1,23 +1,9 @@
-from collections import OrderedDict
 from logging import Logger
-from typing import NamedTuple
 
-from .mode_level import DumperMode
-
-
-class DBMetadata(NamedTuple):
-    """Database object."""
-
-    name: str
-    version: str
-    columns: OrderedDict
-
-    def to_bytes(self) -> None: ...
-    def to_rows(self) -> None: ...
-    def to_pandas(self) -> None: ...
-    def to_polars(self) -> None: ...
-    def close(self) -> None: ...
-    def tell(self) -> int: return 0
+from .structs import (
+    DBMetadata,
+    DumperMode,
+)
 
 
 def __format_table(

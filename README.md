@@ -72,6 +72,7 @@ class MyNewDumper(BaseDumper):
         mode: DumperMode = DumperMode.PROD,
         dump_format: DumpFormat = DumpFormat.BINARY,
         s3_file: bool = False,
+        use_remote_if_available: bool = True,
     ) -> None:
         self.dumper_version = __version__
         super().__init__(
@@ -84,6 +85,7 @@ class MyNewDumper(BaseDumper):
             mode,
             dump_format,
             s3_file,
+            use_remote_if_available,
         )
         # Child dumper initialization here
 
@@ -366,9 +368,9 @@ with open("data.csv", "rb") as f:
 ## Requirements
 
 - Python>=3.10
-- csvpack==0.1.0.dev6
-- light-compressor==0.1.1.dev2
-- sqlparse==0.5.4
+- csvpack==0.2.0.dev0
+- light-compressor==0.1.1.dev3
+- sqlglot>=30.6.0
 - pandas>=2.1.0
 - polars>=0.20.31
 
@@ -378,7 +380,7 @@ with open("data.csv", "rb") as f:
 base_dumper
 ├── csvpack (csv data support)
 ├── light_compressor (compression algorithms)
-├── sqlparse (SQL parsing and splitting)
+├── sqlglot (SQL parsing and splitting)
 ├── pandas (DataFrame support)
 └── polars (DataFrame support)
 ```

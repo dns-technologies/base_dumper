@@ -1,5 +1,22 @@
 # Version History
 
+## 0.3.0.dev0
+
+* Developer release (not public to pip)
+* Delete depends sqlparse
+* Add depends sqlglot>=30.6.0
+* Add use_remote_if_available parameter
+* Change IsolationLevel keys register
+* Refactor common directory
+* Refactor query_parts.sql
+* Rename query_parts.sql -> queries.sql
+* Improve ReaderType.metadata typing
+* Improve WriterType.metadata typing
+* Update pytests
+* Update depends csvpack==0.2.0.dev0
+* Update depends light-compressor==0.1.1.dev3
+* Update README.md
+
 ## 0.2.0.dev6
 
 * Developer release (not public to pip)

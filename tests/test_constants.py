@@ -60,16 +60,16 @@ class TestIsolationLevel:
     """Тесты для IsolationLevel enum."""
 
     def test_values(self):
-        assert IsolationLevel.uncommitted.value == "READ UNCOMMITTED"  # noqa: S101
-        assert IsolationLevel.committed.value == "READ COMMITTED"  # noqa: S101
-        assert IsolationLevel.repeatable.value == "REPEATABLE READ"  # noqa: S101
-        assert IsolationLevel.serializable.value == "SERIALIZABLE"  # noqa: S101
+        assert IsolationLevel.UNCOMMITTED.value == "READ UNCOMMITTED"  # noqa: S101
+        assert IsolationLevel.COMMITTED.value == "READ COMMITTED"  # noqa: S101
+        assert IsolationLevel.REPEATABLE.value == "REPEATABLE READ"  # noqa: S101
+        assert IsolationLevel.SERIALIZABLE.value == "SERIALIZABLE"  # noqa: S101
 
     def test_names(self):
-        assert IsolationLevel.uncommitted.name == "uncommitted"  # noqa: S101
-        assert IsolationLevel.committed.name == "committed"  # noqa: S101
-        assert IsolationLevel.repeatable.name == "repeatable"  # noqa: S101
-        assert IsolationLevel.serializable.name == "serializable"  # noqa: S101
+        assert IsolationLevel.UNCOMMITTED.name == "UNCOMMITTED"  # noqa: S101
+        assert IsolationLevel.COMMITTED.name == "COMMITTED"  # noqa: S101
+        assert IsolationLevel.REPEATABLE.name == "REPEATABLE"  # noqa: S101
+        assert IsolationLevel.SERIALIZABLE.name == "SERIALIZABLE"  # noqa: S101
 
 
 if __name__ == "__main__":

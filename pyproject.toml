@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "base_dumper"
-version = "0.2.0.dev6"
+version = "0.3.0.dev0"
 description = "Abstract class and base common modules for dbhose-airflow dumpers."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -22,9 +22,9 @@ classifiers = [
     "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
-    "csvpack==0.1.0.dev6",
-    "light-compressor==0.1.1.dev2",
-    "sqlparse==0.5.4",
+    "csvpack==0.2.0.dev0",
+    "light-compressor==0.1.1.dev3",
+    "sqlglotc>=30.6.0",
     "pandas>=2.1.0",
     "polars>=0.20.31",
 ]

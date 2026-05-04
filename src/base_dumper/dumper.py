@@ -108,6 +108,8 @@ class BaseDumper(ABC):
     isolation: IsolationLevel
     mode: DumperMode
     dump_format: DumpFormat
+    s3_file: bool
+    use_remote_if_available: bool
     cursor: CursorType
     dbname: str
     is_readonly: bool
@@ -123,10 +125,11 @@ class BaseDumper(ABC):
         compression_level: int = CompressionLevel.ZSTD_DEFAULT,
         logger: Logger | None = None,
         timeout: int = Timeout.DBMS_1_HOUR_TIMEOUT_SEC,
-        isolation: IsolationLevel = IsolationLevel.committed,
+        isolation: IsolationLevel = IsolationLevel.COMMITTED,
         mode: DumperMode = DumperMode.PROD,
         dump_format: DumpFormat = DumpFormat.BINARY,
         s3_file: bool = False,
+        use_remote_if_available: bool = True,
     ) -> None:
         """Class initialization."""
 
@@ -141,6 +144,7 @@ class BaseDumper(ABC):
         self.logger = logger
         self.mode = mode
         self.s3_file = s3_file
+        self.use_remote_if_available = use_remote_if_available
         self._compression_level = compression_level
         self._dump_format = dump_format
         self._timeout = timeout
@@ -163,6 +167,7 @@ class BaseDumper(ABC):
         #     mode,
         #     dump_format,
         #     s3_file,
+        #     use_remote_if_available,
         # )
         # ... # <- child dumper __init__ code here
 

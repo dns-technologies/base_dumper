@@ -5,25 +5,19 @@ from .associate import (
     db_meta_from_iter,
     repair_dtype_data,
 )
-from .connector import DBConnector
-from .dump_format import DumpFormat
 from .errors import (
     BaseDumperError,
     BaseDumperTypeError,
     BaseDumperValueError,
 )
 from .generate_name import random_name
-from .info import DebugInfo
-from .isolations import IsolationLevel
 from .logger import DumperLogger
-from .mode_level import DumperMode
-from .query_parts import (
+from .queries import (
     chunk_query,
     get_query_kind,
     query_formatter,
 )
 from .renders import (
-    DBMetadata,
     log_table,
     single_table,
     transfer_table,
@@ -31,6 +25,14 @@ from .renders import (
 from .stream import (
     CSVStreamReader,
     STREAM_TYPE,
+)
+from .structs import (
+    DBConnector,
+    DBMetadata,
+    DebugInfo,
+    DumperMode,
+    DumpFormat,
+    IsolationLevel,
 )
 from .types import (
     CursorType,

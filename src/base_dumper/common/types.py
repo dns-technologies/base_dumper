@@ -23,11 +23,13 @@ from polars import (
     Object,
 )
 
-from .connector import DBConnector
-from .dump_format import DumpFormat
-from .isolations import IsolationLevel
-from .mode_level import DumperMode
-from .renders import DBMetadata
+from .structs import (
+    DBConnector,
+    DBMetadata,
+    DumperMode,
+    DumpFormat,
+    IsolationLevel,
+)
 
 
 @runtime_checkable
@@ -58,7 +60,7 @@ class ReaderType(Protocol):
     """Protocol for Reader object."""
 
     fileobj: BufferedReader
-    metadata: PackMetaType | bytes | dict[str, Any]
+    metadata: PackMetaType | bytes | list[dict[str, Any]]
     columns: list[str]
     dtypes: list[str]
 
@@ -90,7 +92,7 @@ class PackReaderType(ReaderType):
 class WriterType(Protocol):
     """Protocol for Reader object."""
 
-    metadata: PackMetaType | bytes | dict[str, Any]
+    metadata: PackMetaType | bytes | list[dict[str, Any]]
     columns: list[str]
     dtypes: list[str]
 
