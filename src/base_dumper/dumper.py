@@ -40,6 +40,7 @@ from .common import (
     ReaderType,
     IsolationLevel,
     Timeout,
+    DIALECT,
     STREAM_TYPE,
     chunk_query,
     db_meta_from_iter,
@@ -56,11 +57,11 @@ def multiquery(dump_method: MethodType):
         first_part: list[str]
         second_part: list[str]
 
-        self: BaseDumper = args[0]
-        dumper_src: BaseDumper = kwargs.get("dumper_src", self)
+        self: DumperType = args[0]
+        dumper_src: DumperType = kwargs.get("dumper_src", self)
         queries: str = kwargs.get("query_src") or kwargs.get("query")
         part: int = 1
-        first_part, second_part = chunk_query(queries)
+        first_part, second_part = chunk_query(queries, dumper_src.dialect)
         all_parts = len(sum((first_part, second_part), [])) or int(
             bool(kwargs.get("table_name") or kwargs.get("table_src"))
         )
@@ -234,6 +235,12 @@ class BaseDumper(ABC):
         server transaction isolation level."""
 
         return self._isolation
+
+    @property
+    def dialect(self) -> str:
+        """Property method for get server dialect."""
+
+        return DIALECT.get(self.dbname, "postgres")
 
     @staticmethod
     def _db_meta_from_iter(

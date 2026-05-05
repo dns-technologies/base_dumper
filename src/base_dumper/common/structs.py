@@ -13,15 +13,34 @@ INFO_TEMPLATE = """Execution query on host {info.host}
 ├───────────────┼─────────────────────────┤
 │ Duration      │ {info.duration:>15g} seconds │
 ├───────────────┼─────────────────────────┤
-│ Memory Usage  │ {info.memory:>17,} bytes │
+│ Memory Usage  │ {info.memory_string:>23} │
 ├───────────────┼─────────────────────────┤
-│ Storage Usage │ {info.storage:>17,} bytes │
+│ Storage Usage │ {info.storage_string:>23} │
 ├───────────────┼─────────────────────────┤
 │ Total Count   │ {info.rows:>18,} rows │
 └───────────────┴─────────────────────────┘"""
 
 
-class DumpFormat(Enum):
+def format_bytes(size: int) -> str:
+    """Convert bytes to a human-readable string."""
+
+    if size <= 0:
+        return "0 B"
+
+    for unit in ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"):
+
+        if size < 1024 or unit == "YB":
+
+            if unit == "B":
+                return f"{size} B"
+
+            value = f"{size:.2f}".rstrip("0.")
+            return f"{value} {unit}"
+
+        size /= 1024
+
+
+class DumpFormat(IntEnum):
     """Enum for dump type format."""
 
     BINARY = 0
@@ -64,6 +83,18 @@ class DebugInfo(NamedTuple):
     memory: int = 0
     storage: int = 0
     rows: int = 0
+
+    @property
+    def memory_string(self) -> str:
+        """Human-readable memory string."""
+
+        return format_bytes(self.memory)
+
+    @property
+    def storage_string(self) -> str:
+        """Human-readable storage string."""
+
+        return format_bytes(self.storage)
 
     def __repr__(self) -> str:
         """String representation of DebugInfo."""

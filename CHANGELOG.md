@@ -7,6 +7,9 @@
 * Add depends sqlglot>=30.6.0
 * Add depends sqlglotc>=30.6.0
 * Add use_remote_if_available parameter
+* Add MemoryLimit module with constants limits in bytes
+* Add BaseDumper.dialect property method
+* Add human-readable storage and memory strings for DebugInfo.`__repr__`() method
 * Change IsolationLevel keys register
 * Refactor common directory
 * Refactor query_parts.sql
@@ -15,6 +18,8 @@
 * Improve WriterType.metadata typing
 * Improve BaseDumper._write_between() method
 * Improve BaseDumper.to_fileobj() method
+* Improve DumperType
+* Improve multiquery decorator
 * Update pytests
 * Update depends csvpack==0.2.0.dev0
 * Update depends light-compressor==0.1.1.dev3

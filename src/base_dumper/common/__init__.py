@@ -1,6 +1,9 @@
 """Common functions and classes (including abstract classes)."""
 
-from . import timeouts as Timeout
+from . import (
+    memory_limits as MemoryLimit,
+    timeouts as Timeout,
+)
 from .associate import (
     db_meta_from_iter,
     repair_dtype_data,
@@ -13,6 +16,7 @@ from .errors import (
 from .generate_name import random_name
 from .logger import DumperLogger
 from .queries import (
+    DIALECT,
     chunk_query,
     get_query_kind,
     query_formatter,
@@ -58,11 +62,13 @@ __all__ = (
     "DumperType",
     "DumpFormat",
     "IsolationLevel",
+    "MemoryLimit",
     "PackMetaType",
     "PackReaderType",
     "ReaderType",
     "Timeout",
     "WriterType",
+    "DIALECT",
     "STREAM_TYPE",
     "chunk_query",
     "db_meta_from_iter",

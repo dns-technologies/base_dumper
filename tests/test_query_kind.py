@@ -39,7 +39,7 @@ class TestGetQueryKind:
             ("analyze users", "Analyze"),
             # Другие команды
             ("VACUUM users", "Command"),
-            ("REINDEX TABLE users", "Alias"),
+            ("REINDEX TABLE users", "Command"),
             ("GRANT SELECT ON users TO user", "Grant"),
             ("COMMIT", "Commit"),
             ("BEGIN", "Transaction"),
