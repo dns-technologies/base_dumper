@@ -73,6 +73,7 @@ class MyNewDumper(BaseDumper):
         dump_format: DumpFormat = DumpFormat.BINARY,
         s3_file: bool = False,
         use_remote_if_available: bool = True,
+        limit_warning: int = 0,
     ) -> None:
         self.dumper_version = __version__
         super().__init__(
@@ -86,6 +87,7 @@ class MyNewDumper(BaseDumper):
             dump_format,
             s3_file,
             use_remote_if_available,
+            limit_warning,
         )
         # Child dumper initialization here
 

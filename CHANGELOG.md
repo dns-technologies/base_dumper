@@ -1,5 +1,11 @@
 # Version History
 
+## 0.3.0.dev1
+
+* Developer release (not public to pip)
+* Add attribute limit_warning
+* Update README.md
+
 ## 0.3.0.dev0
 
 * Developer release (not public to pip)

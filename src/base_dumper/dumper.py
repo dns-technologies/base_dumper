@@ -37,8 +37,9 @@ from .common import (
     DumperMode,
     DumperType,
     DumpFormat,
-    ReaderType,
     IsolationLevel,
+    MemoryLimit,
+    ReaderType,
     Timeout,
     DIALECT,
     STREAM_TYPE,
@@ -111,6 +112,7 @@ class BaseDumper(ABC):
     dump_format: DumpFormat
     s3_file: bool
     use_remote_if_available: bool
+    limit_warning: int
     cursor: CursorType
     dbname: str
     is_readonly: bool
@@ -131,6 +133,7 @@ class BaseDumper(ABC):
         dump_format: DumpFormat = DumpFormat.BINARY,
         s3_file: bool = False,
         use_remote_if_available: bool = True,
+        limit_warning: int = MemoryLimit.NO_LIMIT,
     ) -> None:
         """Class initialization."""
 
@@ -146,6 +149,7 @@ class BaseDumper(ABC):
         self.mode = mode
         self.s3_file = s3_file
         self.use_remote_if_available = use_remote_if_available
+        self.limit_warning = limit_warning
         self._compression_level = compression_level
         self._dump_format = dump_format
         self._timeout = timeout
@@ -169,6 +173,7 @@ class BaseDumper(ABC):
         #     dump_format,
         #     s3_file,
         #     use_remote_if_available,
+        #     limit_warning,
         # )
         # ... # <- child dumper __init__ code here
 
